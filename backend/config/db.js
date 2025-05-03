@@ -1,15 +1,15 @@
 // backend/config/db.js
-
+require('dotenv').config(); 
 const { Pool } = require('pg');
 
 class Database {
     constructor() {
         this.pool = new Pool({
-            user: 'postgres',         
-            host: 'localhost',      
-            database: 'farmacia_system',   
-            password: 'admin', 
-            port: 5433,           
+            user: process.env.DB_USER,
+            host: process.env.DB_HOST,
+            database: process.env.DB_NAME,
+            password: process.env.DB_PASSWORD,
+            port: parseInt(process.env.DB_PORT),        
         });
     }
 

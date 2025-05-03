@@ -3,7 +3,11 @@
 const express = require('express');
 const cors = require('cors');
 const userRouter = require('./routes/UserRouter'); 
-
+const productRouter = require('./routes/ProductRouter'); 
+const categoryRouter = require('./routes/CategoryRouter');
+const supplierRouter = require('./routes/SupplierRouter');
+const clientRouter = require('./routes/ClientRouter');
+const saleRouter = require('./routes/SaleRouter');
 
 class Server {
     constructor() {
@@ -19,6 +23,11 @@ class Server {
 
     routes() {
         this.app.use('/api/usuarios', userRouter);
+        this.app.use('/api/productos', productRouter); 
+        this.app.use('/api/categorias', categoryRouter);
+        this.app.use('/api/proveedores', supplierRouter);
+        this.app.use('/api/clientes', clientRouter);
+        this.app.use('/api/ventas', saleRouter);
     }
 
     start() {

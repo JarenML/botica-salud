@@ -1,3 +1,32 @@
-backend/node_modules
+# === BACKEND ===
+backend/node_modules/
 backend/package-lock.json
 backend/.env
+
+# === FRONTEND ===
+frontend/node_modules/
+frontend/package-lock.json
+frontend/dist/
+frontend/dist-ssr/
+
+# === LOGS (ambos) ===
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# === EDITORES (VSCode, WebStorm, etc.) ===
+.vscode/
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# === GENERALES ===
+*.local

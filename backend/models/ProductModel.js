@@ -3,6 +3,9 @@ const db = require('../config/db');
 class ProductModel {
 
     async crearProducto(datos) {
+        
+        datos.requiere_receta = datos.requiere_receta ?? false;
+
         const query = `
         INSERT INTO Producto (
             codigo, nombre, imagen, descripcion, 

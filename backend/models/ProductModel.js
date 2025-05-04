@@ -33,7 +33,8 @@ class ProductModel {
         return result.rows[0]; 
     }
 
-    async listarProductos(codigo=null) {
+    async listarProductos(filtros = {}) {
+        const {codigo, categoria_id} = filtros;
         let query = `
         SELECT 
             p.*, 
@@ -43,14 +44,25 @@ class ProductModel {
         JOIN Categoria c ON p.categoria_id = c.id_categoria
         JOIN Proveedor pr ON p.proveedor_id = pr.id_proveedor`;
     
-        const values = [];
+        const condiciones = [];
+        const valores = [];
 
         if (codigo) {
-            query += ` WHERE p.codigo ILIKE $1`;  
-            values.push(`%${codigo}%`);
+            condiciones.push(`p.codigo ILIKE $${valores.length + 1}`);
+            valores.push(`%${codigo}%`);
         }
 
-        const result = await db.query(query, values);
+        if (categoria_id) {
+            condiciones.push(`p.categoria_id = $${valores.length + 1}`);
+            valores.push(categoria_id);
+        }
+
+        if (condiciones.length > 0) {
+            query += ' WHERE ' + condiciones.join(' AND ');
+        }
+
+
+        const result = await db.query(query, valores);
         return result.rows; 
     }
 

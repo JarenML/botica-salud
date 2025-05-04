@@ -6,8 +6,8 @@ class ProductService {
         return await ProductModel.crearProducto(datos);
     }
 
-    async listarProductos(codigo) {
-        return await ProductModel.listarProductos(codigo);
+    async listarProductos(filtros) {
+        return await ProductModel.listarProductos(filtros);
     }
 
     async obtenerProductoPorId(id) {

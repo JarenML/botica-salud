@@ -3,7 +3,7 @@ const db = require('../config/db');
 class ProductModel {
 
     async crearProducto(datos) {
-        
+
         datos.requiere_receta = datos.requiere_receta ?? false;
 
         const query = `
@@ -33,8 +33,8 @@ class ProductModel {
         return result.rows[0]; 
     }
 
-    async listarProductos() {
-        const query = `
+    async listarProductos(codigo=null) {
+        let query = `
         SELECT 
             p.*, 
             c.nombre AS categoria_nombre, 
@@ -42,7 +42,15 @@ class ProductModel {
         FROM Producto p
         JOIN Categoria c ON p.categoria_id = c.id_categoria
         JOIN Proveedor pr ON p.proveedor_id = pr.id_proveedor`;
-        const result = await db.query(query);
+    
+        const values = [];
+
+        if (codigo) {
+            query += ` WHERE p.codigo ILIKE $1`;  
+            values.push(`%${codigo}%`);
+        }
+
+        const result = await db.query(query, values);
         return result.rows; 
     }
 

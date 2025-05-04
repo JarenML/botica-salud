@@ -13,7 +13,8 @@ class ProductController {
 
     async listarProductos(req, res) {
         try {
-            const productos = await ProductService.listarProductos();
+            const { codigo } = req.query;
+            const productos = await ProductService.listarProductos(codigo);
             res.status(200).json(productos); 
         } catch (error) {
             res.status(500).json({ message: `Error al listar los productos: ${error.message}` });

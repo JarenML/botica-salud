@@ -1,5 +1,4 @@
 // backend/server.js
-
 const express = require('express');
 const cors = require('cors');
 const userRouter = require('./routes/UserRouter'); 
@@ -8,6 +7,7 @@ const categoryRouter = require('./routes/CategoryRouter');
 const supplierRouter = require('./routes/SupplierRouter');
 const clientRouter = require('./routes/ClientRouter');
 const saleRouter = require('./routes/SaleRouter');
+const saleDetailRouter = require('./routes/SaleDetailRouter')
 
 class Server {
     constructor() {
@@ -28,6 +28,7 @@ class Server {
         this.app.use('/api/proveedores', supplierRouter);
         this.app.use('/api/clientes', clientRouter);
         this.app.use('/api/ventas', saleRouter);
+        this.app.use('/api/sale_detail', saleDetailRouter)
     }
 
     start() {

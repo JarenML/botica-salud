@@ -18,8 +18,8 @@ class SaleModel {
         return result.rows[0]; 
     }
 
-    async listarVentas() {
-        const query = `
+    async listarVentas(codigo_venta=null) {
+        let query = `
         SELECT 
             v.*, 
             u.nombre AS usuario_nombre, 
@@ -27,7 +27,15 @@ class SaleModel {
         FROM Venta v
         JOIN Usuario u ON v.usuario_id = u.id_usuario
         JOIN Cliente c ON v.cliente_id = c.id_cliente`;
-        const result = await db.query(query);
+
+
+        let values = []
+        if (codigo_venta) {
+            query += ` WHERE v.codigo_venta ILIKE $1`;
+            values.push(`%${codigo_venta}%`);
+        }
+
+        const result = await db.query(query, values);
         return result.rows; 
     }
 

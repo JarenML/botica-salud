@@ -13,8 +13,8 @@ class ProductController {
 
     async listarProductos(req, res) {
         try {
-            const { codigo, categoria_id } = req.query;
-            const filtros = { codigo, categoria_id }
+            const { codigo, categoria_id, nombre } = req.query;
+            const filtros = { codigo, categoria_id, nombre }
             const productos = await ProductService.listarProductos(filtros);
             res.status(200).json(productos); 
         } catch (error) {

@@ -34,7 +34,7 @@ class ProductModel {
     }
 
     async listarProductos(filtros = {}) {
-        const {codigo, categoria_id} = filtros;
+        const {codigo, categoria_id, nombre} = filtros;
         let query = `
         SELECT 
             p.*, 
@@ -55,6 +55,11 @@ class ProductModel {
         if (categoria_id) {
             condiciones.push(`p.categoria_id = $${valores.length + 1}`);
             valores.push(categoria_id);
+        }
+
+        if (nombre) {
+            condiciones.push(`p.nombre ILIKE $${valores.length + 1}`);
+            valores.push(`%${nombre}%`);
         }
 
         if (condiciones.length > 0) {

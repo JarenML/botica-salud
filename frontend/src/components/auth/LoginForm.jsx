@@ -19,7 +19,7 @@ const LoginForm = () => {
         try {
             const res = await api.post('/usuarios/login', data);
             localStorage.setItem('token', res.data.token);
-            navigate('/');
+            navigate('/home');
         } catch {
             setError('Credenciales inválidas');
         }

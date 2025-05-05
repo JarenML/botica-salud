@@ -1,0 +1,302 @@
+/* Ruta: /src/styles/home.css */
+
+/* Reset completo para ocupar toda la ventana */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden; 
+}
+
+/* Contenedor principal - ocupa toda la ventana */
+.home-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+/* CABECERA FIJA QUE NO SE MUEVE */
+.home-header {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+    padding: 1rem 3rem;
+    background-color: #1a1a2e;
+    border-bottom: 1px solid #2d2d42;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    gap: 2rem;
+    flex-shrink: 0; /* Evita que se encoja */
+}
+
+.header-left h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #4cc9f0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.header-nav ul {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.header-nav a {
+    text-decoration: none;
+    color: #e2e2e2;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.5rem 0;
+    position: relative;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+.header-nav a:hover {
+    color: #4cc9f0;
+}
+
+.header-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #4cc9f0;
+    transition: width 0.3s ease;
+}
+
+.header-nav a:hover::after {
+    width: 100%;
+}
+
+.header-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.header-right p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #b2b2b2;
+    font-weight: 400;
+    background-color: #16213e;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 1px solid #2d2d42;
+}
+
+/* CONTENIDO PRINCIPAL - OCUPA TODO EL ESPACIO DISPONIBLE */
+.home-content {
+    flex: 1;
+    padding: 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Solo scroll interno si es necesario */
+    width: 100%;
+    background-color: #121212;
+}
+
+/* Grid de tarjetas 3x3 que ocupa todo el ancho */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Tarjetas con altura proporcional */
+.card {
+    background-color: #1f1f1f;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    border: 1px solid #2a2a2a;
+    height: 100%;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(76, 201, 240, 0.15);
+    border-color: #4cc9f0;
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #4cc9f0;
+    transition: all 0.3s ease;
+}
+
+.card:hover .card-icon {
+    transform: scale(1.1);
+    color: #f72585;
+}
+
+.card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #ffffff;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.card p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #b2b2b2;
+    line-height: 1.5;
+}
+
+/* Sección de información adicional - 100% ancho */
+.additional-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.info-box {
+    background-color: #1f1f1f;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    border: 1px solid #2a2a2a;
+    height: 100%;
+}
+
+.info-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(76, 201, 240, 0.1);
+    border-color: #4cc9f0;
+}
+
+.info-box h4 {
+    margin: 0 0 1rem;
+    color: #4cc9f0;
+    font-size: 1.2rem;
+    font-weight: 500;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.info-box h4::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #4cc9f0;
+}
+
+.info-box ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.info-box li {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #e2e2e2;
+    position: relative;
+    padding-left: 1.2rem;
+    line-height: 1.5;
+}
+
+.info-box li::before {
+    content: '•';
+    color: #4cc9f0;
+    position: absolute;
+    left: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .cards-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .additional-info {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+    .home-header {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        gap: 1rem;
+        padding: 1.2rem;
+    }
+    
+    .header-nav ul {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .header-right {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .home-content {
+        padding: 1.5rem;
+    }
+    
+    .cards-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .card {
+        min-height: 180px;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-header {
+        padding: 1rem;
+    }
+    
+    .header-nav a {
+        font-size: 0.9rem;
+    }
+    
+    .home-content {
+        padding: 1rem;
+    }
+}

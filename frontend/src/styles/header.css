@@ -1,0 +1,112 @@
+/* CABECERA FIJA QUE NO SE MUEVE */
+.home-header {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+    padding: 1rem 3rem;
+    background-color: #1a1a2e;
+    border-bottom: 1px solid #2d2d42;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    gap: 2rem;
+    flex-shrink: 0; /* Evita que se encoja */
+}
+
+.header-left h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #4cc9f0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.header-nav ul {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.header-nav a {
+    text-decoration: none;
+    color: #e2e2e2;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.5rem 0;
+    position: relative;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+.header-nav a:hover {
+    color: #4cc9f0;
+}
+
+.header-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #4cc9f0;
+    transition: width 0.3s ease;
+}
+
+.header-nav a:hover::after {
+    width: 100%;
+}
+
+.header-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.header-right p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #b2b2b2;
+    font-weight: 400;
+    background-color: #16213e;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 1px solid #2d2d42;
+}
+
+/*responsive*/
+@media (max-width: 900px) {
+    .home-header {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        gap: 1rem;
+        padding: 1.2rem;
+    }
+    
+    .header-nav ul {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .header-right {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-header {
+        padding: 1rem;
+    }
+    
+    .header-nav a {
+        font-size: 0.9rem;
+    }
+    
+    .home-content {
+        padding: 1rem;
+    }
+}

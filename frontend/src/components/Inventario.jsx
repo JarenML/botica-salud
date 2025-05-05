@@ -1,26 +1,39 @@
-//src/components/Inventario.jsx
 import React, { useEffect, useState } from 'react';
 import '../styles/inventario.css';
+import Header from './Header';
 import { obtenerProductos } from '../services/product.service';
+import categoryService from '../services/category.service';
 
 const Inventario = () => {
     const [products, setProducts] = useState([]);
+    const [categorias, setCategorias] = useState([]);
+    const [filtroNombre, setFiltroNombre] = useState('');
+    const [filtroCategoria, setFiltroCategoria] = useState('');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const cargarProductos = async () => {
+        const cargarDatos = async () => {
+            setLoading(true);
             try {
-                const res = await obtenerProductos();
-                setProducts(res.data); 
+                const filtros = {};
+                if (filtroNombre) filtros.nombre = filtroNombre;
+                if (filtroCategoria && filtroCategoria !== 'todos') filtros.categoria_id = filtroCategoria;
+    
+                const [resProductos, resCategorias] = await Promise.all([
+                    obtenerProductos(filtros),
+                    categoryService.listCategories()
+                ]);
+                setProducts(resProductos.data);
+                setCategorias(resCategorias);
             } catch (error) {
-                console.error('Error al cargar productos:', error);
+                console.error('Error al cargar datos:', error);
             } finally {
                 setLoading(false);
             }
         };
-
-        cargarProductos();
-    }, []);
+    
+        cargarDatos();
+    }, [filtroNombre, filtroCategoria]);
 
     return (
         <div className="inventory-page">
@@ -31,11 +44,22 @@ const Inventario = () => {
                 </div>
 
                 <div className="inventory-filters">
-                    <input type="text" placeholder="Buscar producto..." />
-                    <select>
+                    <input
+                        type="text"
+                        placeholder="Buscar producto..."
+                        value={filtroNombre}
+                        onChange={(e) => setFiltroNombre(e.target.value)}
+                    />
+                    <select
+                        value={filtroCategoria}
+                        onChange={(e) => setFiltroCategoria(e.target.value)}
+                    >
                         <option value="todos">Todos</option>
-                        <option value="categoria_a">Categoría A</option>
-                        <option value="categoria_b">Categoría B</option>
+                        {categorias.map((cat) => (
+                            <option key={cat.id_categoria} value={cat.id_categoria}>
+                                {cat.nombre}
+                            </option>
+                        ))}
                     </select>
                 </div>
 

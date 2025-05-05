@@ -46,7 +46,7 @@ const LoginForm = () => {
                                 placeholder="Contraseña" value={data.password} 
                                 onChange={handleChange} required />
                             <span className="password-toggle" onClick={() => setShowPassword(!showPassword)}>
-                                {showPassword ? <FaEyeSlash/> : <FaEye/>}
+                                {showPassword ? <FaEye/> : <FaEyeSlash/>}
                             </span>
                         </div>
                         

@@ -59,7 +59,7 @@ const RegisterForm = () => {
                             <FaLock className="input-icon"/>
                             <input name="password" type={showPassword ? "text" : "password"} placeholder="Contraseña" value={datos.password} onChange={handleChange} required />
                             <span className="password-toggle" onClick={() => setShowPassword(!showPassword)}>
-                                {showPassword ? <FaEyeSlash/> : <FaEye/>}
+                                {showPassword ? <FaEye/> : <FaEyeSlash/>}
                             </span>
                         </div>
                         

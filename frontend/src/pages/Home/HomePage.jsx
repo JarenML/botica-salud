@@ -20,10 +20,11 @@ const HomePage = () => {
                 <nav className="header-nav">
                     <ul>
                         <li><a href="/home">Inicio</a></li>
-                        <li><a href="/inventario">Inventario</a></li>
-                        <li><a href="/ventas">Ventas</a></li>
-                        <li><a href="/clientes">Clientes</a></li>
-                        <li><a href="/registrar-venta">Registrar Venta</a></li>
+                        <li><a href="/Categorías">Categorías</a></li>
+                        <li><a href="/Productos">Productos</a></li>
+                        <li><a href="/Proveedores">Proveedores</a></li>
+                        <li><a href="/Clientes">Clientes</a></li>
+                        <li><a href="/Ventas">Ventas</a></li>
                     </ul>
                 </nav>
                 <div className="header-right">

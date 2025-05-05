@@ -16,6 +16,7 @@ class ProductController {
             const { codigo, categoria_id, nombre } = req.query;
             const filtros = { codigo, categoria_id, nombre }
             const productos = await ProductService.listarProductos(filtros);
+            console.log(productos);
             res.status(200).json(productos); 
         } catch (error) {
             res.status(500).json({ message: `Error al listar los productos: ${error.message}` });

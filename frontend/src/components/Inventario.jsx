@@ -1,6 +1,6 @@
+//src/components/Inventario.jsx
 import React, { useEffect, useState } from 'react';
 import '../styles/inventario.css';
-import Header from './Header';
 import { obtenerProductos } from '../services/product.service';
 
 const Inventario = () => {
@@ -24,7 +24,6 @@ const Inventario = () => {
 
     return (
         <div className="inventory-page">
-            <Header></Header>
             <main className="inventory-content">
                 <div className="inventory-header">
                     <h2>Inventario</h2>

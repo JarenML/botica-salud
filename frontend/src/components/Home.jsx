@@ -1,13 +1,11 @@
-// Ruta: /src/pages/Home/HomePage.jsx
+//src/components/Home.jsx
 import { FaCashRegister, FaBoxes, FaUsers, FaChartBar, FaClipboardList, FaWarehouse } from 'react-icons/fa';
 import '../styles/home.css';
-import Header from './Header';
 
 const Home = () => {
 
     return (
         <div className="home-page">
-            <Header></Header>
 
             <main className="home-content">
                 <div className="cards-container">

@@ -289,6 +289,7 @@
 /* Efecto especial para el formulario de registro */
 .register-form {
     border: 2px solid var(--terciary);
+    padding: 1.0rem !important;
 }
 
 .register-form h2 {

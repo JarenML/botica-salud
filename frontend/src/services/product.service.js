@@ -20,6 +20,11 @@ const productService = {
             console.log(clave, valor);
         }
         return await api.post('/productos', producto);
+    },
+
+    deleteProduct: async (id) => {
+        const res = await api.delete(`/productos/${id}`);
+        return res.data;
     }
 };
 

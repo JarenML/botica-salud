@@ -99,6 +99,18 @@ const Inventario = () => {
         }
     };
 
+    const handleEliminar = async (id_producto) => {
+        console.log(id_producto);
+        if (!confirm('¿Estás seguro de que deseas eliminar este producto?')) return;
+        
+        try {
+            await productService.deleteProduct(id_producto);
+            setProducts((prev) => prev.filter((prod) => prod.id_producto !== id_producto));
+            console.log(`Producto ${id_producto} eliminado.`);
+        } catch (error) {
+            console.error('Error al eliminar el producto:', error);
+        }
+    };
     return (
         
         <div className="inventory-page">
@@ -162,19 +174,20 @@ const Inventario = () => {
                     <p>Cargando productos...</p>
                 ) : (
                     <div className="product-grid">
-                        {products.map((product) => (
-                            
-                            <div key={product.id_producto} className="product-card">
-                                <img src={`${import.meta.env.VITE_API_URL.replace('/api', '')}/images/${product.imagen}`} alt={product.nombre} />
-                                <h3>{product.nombre}</h3>
-                                <p>Stock: {product.stock_actual} unidades</p>
-                                <p className="price">S/ {Number(product.precio_venta).toFixed(2)}</p>
-                                <div className="card-actions">
-                                    <button className="edit-button">✏️ Editar</button>
-                                    <button className="delete-button">🗑 Eliminar</button>
+                        {products.map((product) => {
+                            return (
+                                <div key={product.id_producto} className="product-card">
+                                    <img src={`${import.meta.env.VITE_API_URL.replace('/api', '')}/images/${product.imagen}`} alt={product.nombre} />
+                                    <h3>{product.nombre}</h3>
+                                    <p>Stock: {product.stock_actual} unidades</p>
+                                    <p className="price">S/ {Number(product.precio_venta).toFixed(2)}</p>
+                                    <div className="card-actions">
+                                        <button className="edit-button">✏️ Editar</button>
+                                        <button className="delete-button" onClick={() => handleEliminar(product.id_producto)}>🗑 Eliminar</button>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 )}
             </main>

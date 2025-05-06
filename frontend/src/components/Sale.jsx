@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/sale.css';
+import saleService from '../services/sale.service'; 
 
 const Ventas = () => {
     const [ventas, setVentas] = useState([]);
@@ -7,15 +8,26 @@ const Ventas = () => {
     const [busqueda, setBusqueda] = useState('');
 
     useEffect(() => {
-        const ejemplo = [
-            { codigo: "#VNT-001", fecha: "15/03/2024", cliente: "María González", total: 156.50, estado: "Pagada" },
-            { codigo: "#VNT-002", fecha: "15/03/2024", cliente: "Juan Pérez", total: 89.30, estado: "Pendiente" },
-            { codigo: "#VNT-003", fecha: "15/03/2024", cliente: "Ana Martínez", total: 234.80, estado: "Anulado" },
-            { codigo: "#VNT-004", fecha: "15/03/2024", cliente: "Carlos Ruiz", total: 167.20, estado: "Pagada" },
-            { codigo: "#VNT-005", fecha: "15/03/2024", cliente: "Laura Torres", total: 92.60, estado: "Pendiente" },
-        ];
-        setVentas(ejemplo);
+        const fetchVentas = async () => {
+            try {
+                const data = await saleService.listSales();
+                const formatoVentas = data.map((venta) => ({
+                    codigo: venta.codigo_venta,
+                    fecha: new Date(venta.fecha_creacion).toLocaleDateString('es-PE'),
+                    cliente: venta.cliente_nombre,
+                    total: parseFloat(venta.total),
+                    estado: capitalizar(venta.estado),
+                }));
+                setVentas(formatoVentas);
+            } catch (error) {
+                console.error('Error al obtener las ventas:', error);
+            }
+        };
+        fetchVentas();
     }, []);
+
+    const capitalizar = (texto) =>
+        texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
 
     const ventasFiltradas = ventas.filter((venta) =>
         (filtro === 'Todas' || venta.estado === filtro) &&

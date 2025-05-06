@@ -12,6 +12,7 @@ const CategoryList = () => {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
         fetchCategories();
@@ -54,6 +55,7 @@ const CategoryList = () => {
                 await categoryService.createCategory(formData);
             }
             setFormData({ nombre: '', descripcion: '' });
+            setShowForm(false);
             await fetchCategories();
         } catch (err) {
             setError('Error al guardar la categoría');
@@ -63,6 +65,7 @@ const CategoryList = () => {
     const handleEdit = (category) => {
         setEditingCategory(category);
         setFormData({ nombre: category.nombre, descripcion: category.descripcion });
+        setShowForm(true);
     };
 
     const handleDelete = async (id) => {
@@ -79,67 +82,17 @@ const CategoryList = () => {
     const cancelEdit = () => {
         setEditingCategory(null);
         setFormData({ nombre: '', descripcion: '' });
+        setShowForm(false);
     };
 
     return (
-        <div className="cat-fullscreen">
-            <div className="cat-sidepanel">
-                <div className="cat-panel-header">
-                    <FaBoxes className="cat-panel-icon" />
-                    <h2>Gestión de Categorías</h2>
+        <div className="cat-container">
+            <div className="cat-header">
+                <div className="cat-title-container">
+                    <FaBoxes className="cat-title-icon" />
+                    <h1>Gestión de Categorías</h1>
                 </div>
 
-                <form onSubmit={handleSubmit} className="cat-form">
-                    <div className="cat-form-group">
-                        <label>Nombre</label>
-                        <input
-                            name="nombre"
-                            placeholder="Ej: Medicamentos"
-                            value={formData.nombre}
-                            onChange={handleChange}
-                            required
-                            className="cat-form-input"
-                        />
-                    </div>
-                    
-                    <div className="cat-form-group">
-                        <label>Descripción</label>
-                        <textarea
-                            name="descripcion"
-                            placeholder="Descripción opcional"
-                            value={formData.descripcion}
-                            onChange={handleChange}
-                            className="cat-form-input"
-                            rows="3"
-                        />
-                    </div>
-
-                    <div className="cat-form-actions">
-                        <button type="submit" className="cat-btn-primary">
-                            {editingCategory ? (
-                                <>
-                                    <FaSave /> Guardar
-                                </>
-                            ) : (
-                                <>
-                                    <FaPlus /> Crear
-                                </>
-                            )}
-                        </button>
-                        
-                        {editingCategory && (
-                            <button type="button" onClick={cancelEdit} className="cat-btn-cancel">
-                                <FaTimes /> Cancelar
-                            </button>
-                        )}
-                    </div>
-                    
-                    {error && <div className="cat-error-message">{error}</div>}
-                </form>
-            </div>
-
-            {/* Contenido principal */}
-            <div className="cat-main">
                 <div className="cat-search-container">
                     <div className="cat-search-box">
                         <FaSearch className="cat-search-icon" />
@@ -151,6 +104,63 @@ const CategoryList = () => {
                             className="cat-search-input"
                         />
                     </div>
+                    <button 
+                        onClick={() => setShowForm(!showForm)} 
+                        className="cat-btn-toggle-form"
+                    >
+                        {showForm ? <FaTimes /> : <FaPlus />}
+                        {showForm ? 'Ocultar formulario' : 'Nueva categoría'}
+                    </button>
+                </div>
+            </div>
+
+            {/* Formulario compacto */}
+            {showForm && (
+                <div className="cat-form-container">
+                    <form onSubmit={handleSubmit} className="cat-form">
+                        <div className="cat-form-row">
+                            <div className="cat-form-group compact">
+                                <input
+                                    name="nombre"
+                                    placeholder="Nombre de categoría"
+                                    value={formData.nombre}
+                                    onChange={handleChange}
+                                    required
+                                    className="cat-form-input"
+                                />
+                            </div>
+                            
+                            <div className="cat-form-group compact">
+                                <input
+                                    name="descripcion"
+                                    placeholder="Descripción (opcional)"
+                                    value={formData.descripcion}
+                                    onChange={handleChange}
+                                    className="cat-form-input"
+                                />
+                            </div>
+
+                            <div className="cat-form-actions compact">
+                                <button type="submit" className="cat-btn-primary">
+                                    {editingCategory ? <FaSave /> : <FaPlus />}
+                                    {editingCategory ? 'Guardar' : 'Crear'}
+                                </button>
+                                
+                                {editingCategory && (
+                                    <button type="button" onClick={cancelEdit} className="cat-btn-cancel">
+                                        <FaTimes /> Cancelar
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                        
+                        {error && <div className="cat-error-message">{error}</div>}
+                    </form>
+                </div>
+            )}
+
+            <div className="cat-content">
+                <div className="cat-stats">
                     <div className="cat-total-categories">
                         {filteredCategories.length} {filteredCategories.length === 1 ? 'categoría' : 'categorías'}
                     </div>
@@ -173,7 +183,7 @@ const CategoryList = () => {
                                 ) : (
                                     <>
                                         <h3>No hay categorías registradas</h3>
-                                        <p>Crea tu primera categoría usando el formulario</p>
+                                        <p>Crea tu primera categoría usando el botón "Nueva categoría"</p>
                                     </>
                                 )}
                             </div>

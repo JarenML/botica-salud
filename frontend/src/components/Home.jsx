@@ -1,25 +1,26 @@
 //src/components/Home.jsx
 import { FaCashRegister, FaBoxes, FaUsers, FaChartBar, FaClipboardList, FaWarehouse } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import '../styles/home.css';
 
 const Home = () => {
+    const navigate = useNavigate();
 
     return (
         <div className="home-page">
-
             <main className="home-content">
                 <div className="cards-container">
-                    <div className="card">
+                    <div className="card" onClick={() => navigate('/registro_venta')}>
                         <FaCashRegister className="card-icon" />
                         <h3>Nueva Venta</h3>
                         <p>Registrar nueva transacción</p>
                     </div>
-                    <div className="card">
+                    <div className="card" onClick={() => navigate('/inventario')}>
                         <FaBoxes className="card-icon" />
                         <h3>Gestión de Inventario</h3>
                         <p>Administrar productos</p>
                     </div>
-                    <div className="card">
+                    <div className="card" onClick={() => navigate('/clientes')}>
                         <FaUsers className="card-icon" />
                         <h3>Registro de Clientes</h3>
                         <p>Gestionar clientes</p>

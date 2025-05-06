@@ -19,18 +19,6 @@
 
 .client-container {
     
-    
-    /* Base Styles */
-    .client-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem;
-        background-color: var(--darker);
-        color: var(--light);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        min-height: 100vh;
-    }
-    
     /* Header Styles */
     .client-header {
         display: flex;

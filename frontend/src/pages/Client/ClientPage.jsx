@@ -1,13 +1,11 @@
 // src/pages/Client/ClientPage.jsx
 
 import React from 'react';
-import ClientList from '../../components/client/ClientList'; // Importa el componente de clientes
+import ClientList from '../../components/client/ClientList'; 
 
 const ClientPage = () => {
     return (
-        <div>
-            <ClientList /> {/* Componente principal */}
-        </div>
+            <ClientList /> 
     );
 };
 

@@ -44,11 +44,12 @@ class ProductController {
 
     async actualizarProducto(req, res) {
         try {
+            const datos = req.body
             if (req.file) {
                 console.log(req.file.filename);
                 datos.imagen = req.file.filename;
             }
-            const productoActualizado = await ProductService.actualizarProducto(req.params.id, req.body);
+            const productoActualizado = await ProductService.actualizarProducto(req.params.id, datos);
             res.status(200).json(productoActualizado); 
         } catch (error) {
             res.status(400).json({ message: `Error al actualizar el producto: ${error.message}` });

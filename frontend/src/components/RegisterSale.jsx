@@ -4,7 +4,7 @@ import '../styles/register_sale.css';
 import clientService from '../services/client.service';
 import userService from '../services/user.service';
 import productService from '../services/product.service';
-
+import saleService from '../services/sale.service';
 
 const RegistrarVenta = () => {
     const [cliente, setCliente] = useState('');
@@ -50,6 +50,46 @@ const RegistrarVenta = () => {
         setCarrito([...carrito]);
         setCantidadesTemp(prevState => ({ ...prevState, [producto.codigo]: '' }));
         setErrorMessage(''); 
+    };
+
+    const crearVenta = async () => {
+        if (!cliente || !cajero || carrito.length === 0) {
+            setErrorMessage('Debes seleccionar cliente, cajero y al menos un producto.');
+            return;
+        }
+    
+        const metodos = {
+            'Efectivo': 'efectivo',
+            'Tarjeta de Crédito': 'tarjeta_credito',
+            'Tarjeta de Débito': 'tarjeta_debito',
+            'Transferencia': 'transferencia',
+            'Otros': 'otros',
+        };
+    
+        const venta = {
+            codigo_venta: `VEN-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`,
+            usuario_id: parseInt(cajero),
+            cliente_id: parseInt(cliente),
+            total: Number(total.toFixed(2)),
+            metodo_pago: metodos[metodoPago],
+            estado: 'pendiente',
+            observaciones: 'ninguna'
+        };
+    
+        try {
+            await saleService.createService(venta);
+            alert('Venta registrada con éxito');
+            // reiniciar formulario
+            setCliente('');
+            setCajero('');
+            setMetodoPago('Efectivo');
+            setCarrito([]);
+            setCantidadesTemp({});
+            setBusqueda('');
+        } catch (error) {
+            console.error('error al crear venta:', error);
+            setErrorMessage('Hubo un error al registrar la venta.');
+        }
     };
 
     const eliminarProducto = codigo => {
@@ -225,7 +265,7 @@ const RegistrarVenta = () => {
                 <p>Subtotal: ${subtotal.toFixed(2)}</p>
                 <p>IVA (16%): ${iva.toFixed(2)}</p>
                 <h3>Total: ${total.toFixed(2)}</h3>
-                <button className="crear-venta-btn">Crear Venta</button>
+                <button className="crear-venta-btn" onClick={crearVenta}>Crear Venta</button>
             </div>
         </div>
     );

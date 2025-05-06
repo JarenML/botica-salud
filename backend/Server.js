@@ -29,6 +29,7 @@ class Server {
         this.app.use('/api/clientes', clientRouter);
         this.app.use('/api/ventas', saleRouter);
         this.app.use('/api/sale_detail', saleDetailRouter)
+        this.app.use('/images', express.static('public/images'));
     }
 
     start() {

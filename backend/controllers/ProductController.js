@@ -4,8 +4,15 @@ class ProductController {
     
     async crearProducto(req, res) {
         try {
-            const nuevoProducto = await ProductService.crearProducto(req.body);
-            res.status(201).json(nuevoProducto); 
+            console.log(req.file); 
+            const datos = req.body;
+            console.log("BODY: ", datos);
+            if (req.file) {
+                console.log(req.file.filename);
+                datos.imagen = req.file.filename;
+            }
+            const nuevoProducto = await ProductService.crearProducto(datos);
+            res.status(201).json(nuevoProducto);
         } catch (error) {
             res.status(400).json({ message: `Error al crear el producto: ${error.message}` });
         }

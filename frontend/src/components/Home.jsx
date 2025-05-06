@@ -25,20 +25,20 @@ const Home = () => {
                         <h3>Registro de Clientes</h3>
                         <p>Gestionar clientes</p>
                     </div>
-                    <div className="card">
+                    <div className="card" onClick={() => navigate('/categorias')}>
                         <FaChartBar className="card-icon" />
-                        <h3>Reportes Diarios</h3>
-                        <p>Ver reporte</p>
+                        <h3>Categorias</h3>
+                        <p>Ver todas las Categoria</p>
                     </div>
-                    <div className="card">
+                    <div className="card" onClick={() => navigate('/ventas')}>
                         <FaClipboardList className="card-icon" />
-                        <h3>Ventas del Día</h3>
-                        <p>Total de ventas: <strong>25</strong></p>
+                        <h3>Ventas</h3>
+                        <p>Información de Ventas</p>
                     </div>
-                    <div className="card">
+                    <div className="card" onClick={() => navigate('/proveedores')}>
                         <FaWarehouse className="card-icon" />
-                        <h3>Total de Productos</h3>
-                        <p>Cantidad: <strong>120</strong></p>
+                        <h3>Proveedores</h3>
+                        <p>Lista de proveedores</p>
                     </div>
                 </div>
 

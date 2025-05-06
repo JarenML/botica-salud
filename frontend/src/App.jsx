@@ -9,6 +9,7 @@ import CategoryPage from './pages/Category/CategoryPage';
 import SupplierPage from './pages/Supplier/SupplierPage'; 
 import ClientPage from './pages/Client/ClientPage';
 import RegisterSalePage from './pages/Sale/RegisterSale';
+import SalePage from './pages/Sale/SalePage';
 
 function App() {
     const location = useLocation(); 
@@ -27,6 +28,7 @@ function App() {
                 <Route path="/proveedores" element={<SupplierPage />} /> 
                 <Route path="/clientes" element={<ClientPage />} />
                 <Route path='/registro_venta' element={<RegisterSalePage/>}/>
+                <Route path='/ventas' element={<SalePage/>}/>
             </Routes>
         </>
     );

@@ -1,0 +1,143 @@
+.ventas-wrapper {
+    padding: 2rem 3rem;
+    background-color: #0f0f2d;
+    color: #e2e2e2;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.ventas-wrapper h1 {
+    font-size: 2rem;
+    color: #4cc9f0;
+    margin-bottom: 0.3rem;
+}
+
+.subtitulo {
+    font-size: 1rem;
+    color: #b2b2b2;
+    margin-bottom: 2rem;
+}
+
+.ventas-controles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.ventas-controles input[type="text"] {
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #2d2d42;
+    background-color: #16213e;
+    color: #e2e2e2;
+    width: 300px;
+    transition: border-color 0.3s ease;
+}
+
+.ventas-controles input[type="text"]:focus {
+    outline: none;
+    border-color: #4cc9f0;
+}
+
+.ventas-filtros {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.ventas-filtros button {
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: #2d2d42;
+    color: #e2e2e2;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.ventas-filtros button.activo,
+.ventas-filtros button:hover {
+    background-color: #4cc9f0;
+    color: #1a1a2e;
+}
+
+.ventas-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    background-color: #1a1a2e;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.ventas-tabla th, .ventas-tabla td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #2d2d42;
+}
+
+.ventas-tabla th {
+    background-color: #16213e;
+    color: #4cc9f0;
+    font-weight: 600;
+}
+
+.ventas-tabla td {
+    color: #e2e2e2;
+}
+
+.badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.badge.pagada {
+    background-color: #00b894;
+    color: #fff;
+}
+
+.badge.pendiente {
+    background-color: #fdcb6e;
+    color: #1a1a2e;
+}
+
+.badge.anulado {
+    background-color: #d63031;
+    color: #fff;
+}
+
+.ventas-paginacion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #b2b2b2;
+    font-size: 0.9rem;
+}
+
+.ventas-paginacion select {
+    margin-left: 0.5rem;
+    padding: 0.3rem;
+    border-radius: 5px;
+    background-color: #2d2d42;
+    color: #e2e2e2;
+    border: none;
+}
+
+.ventas-paginacion button {
+    padding: 0.4rem 0.8rem;
+    background-color: #2d2d42;
+    color: #e2e2e2;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.ventas-paginacion button:hover {
+    background-color: #4cc9f0;
+    color: #1a1a2e;
+}

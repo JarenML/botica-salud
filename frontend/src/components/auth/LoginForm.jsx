@@ -13,12 +13,17 @@ const LoginForm = () => {
     const navigate = useNavigate();
 
     const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const res = await api.post('/usuarios/login', data);
-            localStorage.setItem('token', res.data.token);
+            // Asegúrate de guardar nombre y rol
+            localStorage.setItem('usuario', JSON.stringify({
+                nombre: res.data.nombre || res.data.username, 
+                rol: res.data.rol
+            }));
+
             navigate('/home');
         } catch {
             setError('Credenciales inválidas');
@@ -28,28 +33,28 @@ const LoginForm = () => {
     return (
         <>
             <div className="page-background" style={{ backgroundImage: `url(${loginBg})` }} />
-            <div className="register-page">
+            <div className="auth-page">
                 <div className="form-container">
-                    <form onSubmit={handleSubmit} className="auth-form">
+                    <form onSubmit={handleSubmit} className="auth-form login-form">
                         <h1 className="app-title">NOVA SALUD</h1>
                         <h2>Iniciar Sesión</h2>
-                        
+
                         <div className="input-with-icon">
-                            <FaUser className="input-icon"/>
-                            <input name="username" placeholder="Usuario" 
+                            <FaUser className="input-icon" />
+                            <input name="username" placeholder="Usuario"
                                 value={data.username} onChange={handleChange} required />
                         </div>
-                        
+
                         <div className="input-with-icon">
-                            <FaLock className="input-icon"/>
-                            <input name="password" type={showPassword ? "text" : "password"} 
-                                placeholder="Contraseña" value={data.password} 
+                            <FaLock className="input-icon" />
+                            <input name="password" type={showPassword ? "text" : "password"}
+                                placeholder="Contraseña" value={data.password}
                                 onChange={handleChange} required />
                             <span className="password-toggle" onClick={() => setShowPassword(!showPassword)}>
-                                {showPassword ? <FaEye/> : <FaEyeSlash/>}
+                                {showPassword ? <FaEye /> : <FaEyeSlash />}
                             </span>
                         </div>
-                        
+
                         <button type="submit">Entrar</button>
                         {error && <p className="error">{error}</p>}
                         <p className="redirect">¿No tienes cuenta? <a href="/registro">Regístrate</a></p>

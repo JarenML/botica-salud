@@ -110,3 +110,45 @@
         padding: 1rem;
     }
 }
+/* Estilos para la sección de usuario */
+.header-right {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Empuja el contenido a la derecha */
+}
+
+.user-display {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.user-display:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.user-icon {
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.user-role {
+    font-size: 0.8rem;
+    color: var(--primary-light);
+    text-transform: capitalize;
+}

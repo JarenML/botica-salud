@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import '../../styles/auth.css';
-import registerBg from '../../assets/register-bg.jpg';
+import registerBg from '../../assets/register2-bg.jpg';
 import { FaUser, FaLock, FaEnvelope, FaIdCard, FaEye, FaEyeSlash, FaUserTie } from 'react-icons/fa';
 
 const RegisterForm = () => {
@@ -29,7 +29,7 @@ const RegisterForm = () => {
     return (
         <>
             <div className="page-background" style={{ backgroundImage: `url(${registerBg})` }} />
-            <div className="register-page">
+            <div className="auth-page">
                 <div className="form-container">
                     <form onSubmit={handleSubmit} className="auth-form register-form">
                         <h1 className="app-title">NOVA SALUD</h1>

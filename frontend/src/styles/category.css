@@ -100,7 +100,7 @@
 }
 
 textarea.cat-form-input {
-    min-height: 100px;
+    min-height: 120px;
     resize: vertical;
 }
 
@@ -214,7 +214,6 @@ textarea.cat-form-input {
     margin: 0;
     font-size: 0.9rem;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }

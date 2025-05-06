@@ -1,12 +1,12 @@
 /* src/styles/auth.css */
 :root {
-    --primary: #6a56ff;
-    --secondary: #8c85e8;
+    --primary-auth: #6a56ff;
+    --secondary-auth: #8c85e8;
     --terciary: hsl(145, 89%, 42%);       
     --cuartory: #21d5a2;   
     --dark: #2d3436;
     --darker: #1e272e;
-    --light: #d0d5e8;
+    --light: #e4e8d0;
     --success: #00b894;
     --error: #d63031;
     --warning: #fdcb6e;
@@ -19,6 +19,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Estilos comunes a ambos formularios */
 .page-background {
     position: fixed;
     top: 0;
@@ -31,7 +32,7 @@
     z-index: -1;
 }
 
-.register-page {
+.auth-page {
     position: fixed; 
     top: 0;
     left: 0;
@@ -55,11 +56,10 @@
 
 .auth-form {
     background: rgba(30, 39, 46, 0.8);
-    border-radius: 16px;
+    border-radius: 20px;
     padding: 2.5rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(108, 92, 231, 0.3);
     transform-style: preserve-3d;
     transition: all 0.5s ease;
     animation: float 6s ease-in-out infinite;
@@ -71,7 +71,6 @@
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
 }
 
-/* Estilos para el título */
 .app-title {
     color: white;
     font-size: 2.5rem;
@@ -80,53 +79,10 @@
     text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-/* Estilos para inputs con iconos */
-.input-with-icon {
-    position: relative;
-    width: 100%;
-    margin-bottom: 15px;
-}
-
-.input-icon {
-    position: absolute;
-    left: 15px;
-    top: 30%;
-    transform: translateY(-50%);
-    color: var(--light);
-}
-
-.input-with-icon input {
-    padding-left: 40px !important;
-    width: 100%;
-}
-
-.password-toggle {
-    position: absolute;
-    right: 15px;
-    top: 40%;
-    transform: translateY(-50%);
-    color: var(--light);
-    cursor: pointer;
-}
-
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
 .auth-form h2 {
     text-align: center;
     margin-bottom: 1.5rem;
     font-size: 2rem;
-    color: var(--primary);
-    text-shadow: 0 0 10px rgba(38, 230, 20, 0.5);
     position: relative;
 }
 
@@ -135,12 +91,10 @@
     display: block;
     width: 60px;
     height: 3px;
-    background: linear-gradient(to right, var(--primary), var(--secondary));
     margin: 0.5rem auto 0;
     border-radius: 3px;
 }
 
-/* Campos de entrada */
 .auth-form input,
 .auth-form select {
     width: 100%;
@@ -159,7 +113,6 @@
 .auth-form select:focus {
     outline: none;
     background: rgba(255, 255, 255, 0.15);
-    border-left: 3px solid var(--primary);
     box-shadow: 0 0 10px rgba(108, 92, 231, 0.3);
 }
 
@@ -167,32 +120,27 @@
     color: rgba(255, 255, 255, 0.6);
 }
 
-/* Botones */
 .auth-form button {
     width: 100%;
     padding: 12px;
     border: none;
     border-radius: 8px;
-    background: linear-gradient(45deg, var(--primary), var(--secondary));
     color: white;
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
     margin-top: 0.5rem;
-    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
 }
 
 .auth-form button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
 }
 
 .auth-form button:active {
     transform: translateY(0);
 }
 
-/* Mensajes */
 .error,
 .success {
     padding: 10px;
@@ -215,7 +163,6 @@
     color: var(--success);
 }
 
-/* Enlaces */
 .redirect {
     text-align: center;
     margin-top: 1.5rem;
@@ -223,99 +170,17 @@
 }
 
 .redirect a {
-    color: var(--secondary);
+    color: var(--secondary-auth);
     text-decoration: none;
     font-weight: 600;
     transition: all 0.3s ease;
 }
 
 .redirect a:hover {
-    color: var(--primary);
+    color: var(--primary-auth);
     text-shadow: 0 0 5px rgba(108, 92, 231, 0.5);
 }
 
-/* Animaciones */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Efecto de onda en los inputs */
-.wave-group {
-    position: relative;
-    margin-bottom: 1.2rem;
-}
-
-.wave-group .input {
-    width: 100%;
-    padding: 12px 15px;
-    border: none;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--light);
-    font-size: 1rem;
-    transition: all 0.3s ease;
-}
-
-.wave-group .input:focus {
-    outline: none;
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.wave-group .label {
-    position: absolute;
-    left: 15px;
-    top: 12px;
-    color: rgba(255, 255, 255, 0.6);
-    pointer-events: none;
-    transition: all 0.3s ease;
-}
-
-.wave-group .input:focus~.label,
-.wave-group .input:valid~.label {
-    top: -20px;
-    left: 10px;
-    font-size: 0.8rem;
-    color: var(--primary);
-}
-
-/* Efecto especial para el formulario de registro */
-.register-form {
-    border: 2px solid var(--terciary);
-    padding: 1.0rem !important;
-}
-
-.register-form h2 {
-    color: var(--success); 
-    color: var(--terciary); 
-    text-shadow: 0 0 10px rgba(0, 184, 148, 0.5); 
-    text-shadow: 0 0 10px var(--terciary); 
-}
-
-.register-form h2::after {
-    background: linear-gradient(to right, var(--success), #55efc4); 
-    background: linear-gradient(to right, var(--terciary), var(--cuartory)); 
-}
-
-.register-form button {
-    background: linear-gradient(45deg, var(--success), #55efc4); 
-    background: linear-gradient(45deg, var(--terciary), var(--cuartory)); 
-    box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3); 
-    box-shadow: 0 4px 15px var(--terciary); 
-}
-
-.register-form button:hover {
-    box-shadow: 0 6px 20px rgba(0, 184, 148, 0.4); 
-    box-shadow: 0 6px 20px var(--terciary); 
-}
-/*Estilo para registro*/
 .input-with-icon {
     position: relative;
     margin-bottom: 15px;
@@ -343,4 +208,88 @@
     transform: translateY(-50%);
     color: var(--light);
     cursor: pointer;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* ESTILOS ESPECÍFICOS PARA LOGIN - COLOR MORADO (PRIMARY) */
+.login-form {
+    border: 2px solid rgba(108, 92, 231, 0.3);
+}
+
+.login-form h2 {
+    color: var(--primary-auth) !important; 
+    text-shadow: 0 0 10px rgba(106, 86, 255, 0.5) !important;
+}
+
+.login-form h2::after {
+    background: linear-gradient(to right, var(--primary-auth), var(--secondary-auth)) !important;
+}
+
+.login-form button {
+    background: linear-gradient(45deg, var(--primary-auth), var(--secondary-auth)) !important;
+    box-shadow: 0 4px 15px rgba(106, 86, 255, 0.3) !important;
+}
+
+.login-form button:hover {
+    box-shadow: 0 6px 20px rgba(106, 86, 255, 0.4) !important;
+}
+
+.login-form input:focus,
+.login-form select:focus {
+    border-left: 3px solid var(--primary-auth) !important;
+}
+
+/* ESTILOS ESPECÍFICOS PARA REGISTRO - COLOR VERDE (TERCIARY) */
+.register-form {
+    border: 2px solid var(--terciary);
+    padding: 0.8rem 1.2rem !important;
+    
+}
+
+.register-form h2 {
+    color: var(--terciary) !important; 
+    margin-bottom: 1rem !important;
+    text-shadow: 0 0 10px rgba(33, 213, 162, 0.5) !important;
+}
+
+.register-form h2::after {
+    background: linear-gradient(to right, var(--terciary), var(--cuartory)) !important;
+}
+
+.register-form .input-with-icon {
+    margin-bottom: 0.1rem !important;
+}
+
+.register-form button {
+    background: linear-gradient(45deg, var(--terciary), var(--cuartory)) !important;
+    box-shadow: 0 4px 15px rgba(33, 213, 162, 0.3) !important;
+}
+
+.register-form button:hover {
+    box-shadow: 0 6px 20px rgba(33, 213, 162, 0.4) !important;
+    
+}
+
+.register-form input:focus,
+.register-form select:focus {
+    border-left: 3px solid var(--terciary) !important;
+    
 }

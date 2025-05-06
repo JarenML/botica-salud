@@ -16,16 +16,40 @@ const RegistrarVenta = () => {
     const [cajerosDisponibles, setCajerosDisponibles] = useState([]);
     const [productosDisponibles, setProductosDisponibles] = useState([]);
     const [cantidadesTemp, setCantidadesTemp] = useState({});
+    const [errorMessage, setErrorMessage] = useState('');
 
     const agregarProducto = (producto, cantidad) => {
-        if (!cantidad || cantidad < 1) return;
+        if (!cantidad || cantidad < 1 ) {
+            return;
+        }
+
+        if ( cantidad > producto.stock_actual ) {
+            setErrorMessage('Cantidad excede el stock disponible');
+            return;
+        }
+    
+        const cantidadTotal = carrito.reduce((acc, item) => {
+            if (item.codigo === producto.codigo) {
+                return acc + item.cantidad;
+            }
+            return acc;
+        }, 0);
+    
+        if (cantidadTotal + cantidad > producto.stock_actual) {
+            setErrorMessage('Cantidad excede el stock disponible');
+            return;
+        }
+    
         const existente = carrito.find(item => item.codigo === producto.codigo);
         if (existente) {
             existente.cantidad += cantidad;
         } else {
             carrito.push({ ...producto, cantidad });
         }
+    
         setCarrito([...carrito]);
+        setCantidadesTemp(prevState => ({ ...prevState, [producto.codigo]: '' }));
+        setErrorMessage(''); 
     };
 
     const eliminarProducto = codigo => {
@@ -72,7 +96,7 @@ const RegistrarVenta = () => {
         fetchProductos();
     }, []);
 
-    const subtotal = carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+    const subtotal = carrito.reduce((acc, item) => acc + item.precio_venta * item.cantidad, 0);
     const iva = subtotal * 0.16;
     const total = subtotal + iva;
 
@@ -81,23 +105,23 @@ const RegistrarVenta = () => {
             <h2>Registrar Venta</h2>
 
             <div className="form-venta">
-            <select value={cliente} onChange={e => setCliente(e.target.value)}>
-                <option value="">Seleccionar cliente...</option>
-                {clientesDisponibles.map(c => (
-                    <option key={c.id_cliente} value={c.id_cliente}>
-                        {c.nombre}
-                    </option>
-                ))}
-            </select>
+                <select value={cliente} onChange={e => setCliente(e.target.value)}>
+                    <option value="">Seleccionar cliente...</option>
+                    {clientesDisponibles.map(c => (
+                        <option key={c.id_cliente} value={c.id_cliente}>
+                            {c.nombre}
+                        </option>
+                    ))}
+                </select>
 
-            <select value={cajero} onChange={e => setCajero(e.target.value)}>
-                <option value="">Seleccionar cajero...</option>
-                {cajerosDisponibles.map(c => (
-                    <option key={c.id_usuario} value={c.id_usuario}>
-                        {c.nombre} {c.apellidos}
-                    </option>
-                ))}
-            </select>
+                <select value={cajero} onChange={e => setCajero(e.target.value)}>
+                    <option value="">Seleccionar cajero...</option>
+                    {cajerosDisponibles.map(c => (
+                        <option key={c.id_usuario} value={c.id_usuario}>
+                            {c.nombre} {c.apellidos}
+                        </option>
+                    ))}
+                </select>
 
                 
                 <div className="metodo-pago">
@@ -119,7 +143,7 @@ const RegistrarVenta = () => {
                     onChange={e => setBusqueda(e.target.value)}
                     className="buscador-productos"
                 />
-
+                {errorMessage && <div className="error-message">{errorMessage}</div>}
             </div>
 
             <table className="tabla-productos">
@@ -164,6 +188,7 @@ const RegistrarVenta = () => {
                             <button onClick={() => agregarProducto(producto, cantidadesTemp[producto.codigo] || 0)}>+</button>
                             </td>
                         </tr>
+                        
                 ))}
                 </tbody>
             </table>
@@ -186,8 +211,8 @@ const RegistrarVenta = () => {
                             <td>{item.codigo}</td>
                             <td>{item.nombre}</td>
                             <td>{item.cantidad}</td>
-                            <td>${item.precio.toFixed(2)}</td>
-                            <td>${(item.precio * item.cantidad).toFixed(2)}</td>
+                            <td>${Number(item.precio_venta).toFixed(2)}</td>
+                            <td>${(Number(item.precio_venta) * item.cantidad).toFixed(2)}</td>
                             <td>
                                 <button onClick={() => eliminarProducto(item.codigo)}>🗑️</button>
                             </td>

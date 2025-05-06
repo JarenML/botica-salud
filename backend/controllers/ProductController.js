@@ -6,7 +6,7 @@ class ProductController {
         try {
             console.log(req.file); 
             const datos = req.body;
-            console.log("BODY: ", datos);
+            console.log("BODY: ", datos)
             if (req.file) {
                 console.log(req.file.filename);
                 datos.imagen = req.file.filename;
@@ -44,6 +44,10 @@ class ProductController {
 
     async actualizarProducto(req, res) {
         try {
+            if (req.file) {
+                console.log(req.file.filename);
+                datos.imagen = req.file.filename;
+            }
             const productoActualizado = await ProductService.actualizarProducto(req.params.id, req.body);
             res.status(200).json(productoActualizado); 
         } catch (error) {

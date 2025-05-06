@@ -22,6 +22,11 @@ const productService = {
         return await api.post('/productos', producto);
     },
 
+    updateProduct: async (id, data) => {
+        const res = await api.put(`/productos/${id}`, data);
+        return res.data;
+    },
+
     deleteProduct: async (id) => {
         const res = await api.delete(`/productos/${id}`);
         return res.data;

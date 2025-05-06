@@ -24,6 +24,8 @@ const Inventario = () => {
         stock_minimo: '',
         ubicacion: ''
     });
+    const [modoEdicion, setModoEdicion] = useState(false);
+    const [productoEditandoId, setProductoEditandoId] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const cargarDatos = useCallback(async () => {
@@ -73,28 +75,41 @@ const Inventario = () => {
         }));
 
     };
+
+    const handleEditar = (producto) => {
+        const productoFormateado = {
+            ...producto,
+            fecha_vencimiento: producto.fecha_vencimiento?.split('T')[0] || ''
+        };
+        setNuevoProducto(productoFormateado);
+        setModalVisible(true);
+        setModoEdicion(true);
+        setProductoEditandoId(producto.id_producto);
+    };
     
     const handleGuardar = async () => {
         try {
             const formData = new FormData();
-            // Agregar campos de texto
             for (let key in nuevoProducto) {
-                console.log(key, nuevoProducto[key])
                 if (key !== 'imagen') {
-                formData.append(key, nuevoProducto[key]);
+                    formData.append(key, nuevoProducto[key]);
                 }
             }
-        
-            // Agregar el archivo de imagen
             if (nuevoProducto.imagen) {
                 formData.append('imagen', nuevoProducto.imagen);
             }
-            await productService.createProduct(formData); 
     
-            console.log("Producto guardado:", nuevoProducto);
+            if (modoEdicion && productoEditandoId) {
+                await productService.updateProduct(productoEditandoId, formData);
+            } else {
+                await productService.createProduct(formData);
+            }
+    
             setModalVisible(false);
-            setFiltroNombre(''); 
-            await cargarDatos(); // 👈 Aquí recargas productos
+            setModoEdicion(false);
+            setProductoEditandoId(null);
+            setNuevoProducto({ /* resetea todos los campos */ });
+            await cargarDatos();
         } catch (error) {
             console.error("Error al guardar:", error);
         }
@@ -119,7 +134,7 @@ const Inventario = () => {
                 {modalVisible && (
                 <div className="modal-overlay">
                     <div className="modal">
-                        <h2>Registrar nuevo producto</h2>
+                        <h2>{modoEdicion ? 'Editar producto' : 'Registrar nuevo producto'}</h2>
                         <div className="modal-form">
                             <input name="codigo" placeholder="Código" value={nuevoProducto.codigo} onChange={handleChangeModal} />
                             <input name="nombre" placeholder="Nombre" value={nuevoProducto.nombre} onChange={handleChangeModal} />
@@ -140,7 +155,7 @@ const Inventario = () => {
                             <input name="ubicacion" placeholder="Ubicación" value={nuevoProducto.ubicacion} onChange={handleChangeModal} />
                         </div>
                         <div className="modal-actions">
-                            <button className="save-button" onClick={handleGuardar}>Guardar</button>
+                        <button className="save-button" onClick={handleGuardar}>{modoEdicion ? 'Actualizar' : 'Guardar'}</button>
                             <button className="cancel-button" onClick={() => setModalVisible(false)}>Cancelar</button>
                         </div>
                     </div>
@@ -183,7 +198,7 @@ const Inventario = () => {
                                     <p>Stock: {product.stock_actual} unidades</p>
                                     <p className="price">S/ {Number(product.precio_venta).toFixed(2)}</p>
                                     <div className="card-actions">
-                                        <button className="edit-button">✏️ Editar</button>
+                                        <button className="edit-button" onClick={() => handleEditar(product)}>✏️ Editar</button>
                                         <button className="delete-button" onClick={() => handleEliminar(product.id_producto)}>🗑 Eliminar</button>
                                     </div>
                                 </div>

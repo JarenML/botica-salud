@@ -8,6 +8,7 @@ import InventarioPage from './pages/Inventario/InventarioPage';
 import CategoryPage from './pages/Category/CategoryPage';
 import SupplierPage from './pages/Supplier/SupplierPage'; 
 import ClientPage from './pages/Client/ClientPage';
+import RegisterSalePage from './pages/Sale/RegisterSale';
 
 function App() {
     const location = useLocation(); 
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/categorias" element={<CategoryPage />} />
                 <Route path="/proveedores" element={<SupplierPage />} /> 
                 <Route path="/clientes" element={<ClientPage />} />
+                <Route path='/registro_venta' element={<RegisterSalePage/>}/>
             </Routes>
         </>
     );

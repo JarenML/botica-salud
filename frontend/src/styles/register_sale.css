@@ -1,0 +1,110 @@
+.registrar-venta-container {
+    padding: 2rem;
+    background-color: #12122b;
+    color: #e2e2e2;
+    min-height: 100vh;
+}
+
+h2 {
+    color: #4cc9f0;
+    margin-bottom: 1.5rem;
+}
+
+.form-venta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.form-venta select {
+    padding: 0.5rem;
+    background: #1e1e3f;
+    color: #fff;
+    border: 1px solid #4cc9f0;
+    border-radius: 5px;
+}
+
+.metodo-pago {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.metodo-pago button {
+    padding: 0.5rem 1rem;
+    background: #2a2a4e;
+    color: #e2e2e2;
+    border: 1px solid #4cc9f0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.metodo-pago .activo {
+    background-color: #4cc9f0;
+    color: #1a1a2e;
+    font-weight: bold;
+}
+
+.tabla-productos,
+.tabla-carrito {
+    width: 100%;
+    margin-top: 1rem;
+    border-collapse: collapse;
+}
+
+.tabla-productos th,
+.tabla-carrito th,
+.tabla-productos td,
+.tabla-carrito td {
+    border: 1px solid #2d2d42;
+    padding: 0.75rem;
+    text-align: center;
+}
+
+.tabla-productos input {
+    width: 60px;
+    padding: 0.3rem;
+    background: #1e1e3f;
+    color: white;
+    border: 1px solid #4cc9f0;
+    border-radius: 5px;
+}
+
+.resumen-venta {
+    margin-top: 2rem;
+    text-align: right;
+    color: #e2e2e2;
+}
+
+.crear-venta-btn {
+    background: #4cc9f0;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    color: #12122b;
+    font-weight: bold;
+    margin-top: 1rem;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.crear-venta-btn:hover {
+    background: #38a9d6;
+}
+
+.buscador-productos {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px 12px;
+    margin: 10px 0 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    transition: border-color 0.2s ease-in-out;
+}
+
+.buscador-productos:focus {
+    border-color: #007bff;
+    outline: none;
+}

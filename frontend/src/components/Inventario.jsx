@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import '../styles/inventario.css';
 import Header from './Header';
 import productService from '../services/product.service';
@@ -26,29 +26,29 @@ const Inventario = () => {
     });
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const cargarDatos = async () => {
-            setLoading(true);
-            try {
-                const filtros = {};
-                if (filtroNombre) filtros.nombre = filtroNombre;
-                if (filtroCategoria && filtroCategoria !== 'todos') filtros.categoria_id = filtroCategoria;
+    const cargarDatos = useCallback(async () => {
+        setLoading(true);
+        try {
+            const filtros = {};
+            if (filtroNombre) filtros.nombre = filtroNombre;
+            if (filtroCategoria && filtroCategoria !== 'todos') filtros.categoria_id = filtroCategoria;
     
-                const [resProductos, resCategorias] = await Promise.all([
-                    productService.listProducts(filtros),
-                    categoryService.listCategories()
-                ]);
-                setProducts(resProductos.data);
-                setCategorias(resCategorias);
-            } catch (error) {
-                console.error('Error al cargar datos:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-    
-        cargarDatos();
+            const [resProductos, resCategorias] = await Promise.all([
+                productService.listProducts(filtros),
+                categoryService.listCategories()
+            ]);
+            setProducts(resProductos.data);
+            setCategorias(resCategorias);
+        } catch (error) {
+            console.error('Error al cargar datos:', error);
+        } finally {
+            setLoading(false);
+        }
     }, [filtroNombre, filtroCategoria]);
+    
+    useEffect(() => {
+        cargarDatos();
+    }, [cargarDatos]); 
 
     const handleChangeModal = (e) => {
         const { name, value } = e.target;
@@ -94,6 +94,7 @@ const Inventario = () => {
             console.log("Producto guardado:", nuevoProducto);
             setModalVisible(false);
             setFiltroNombre(''); 
+            await cargarDatos(); // 👈 Aquí recargas productos
         } catch (error) {
             console.error("Error al guardar:", error);
         }

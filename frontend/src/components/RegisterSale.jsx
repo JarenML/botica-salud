@@ -15,6 +15,7 @@ const RegistrarVenta = () => {
     const [clientesDisponibles, setClientesDisponibles] = useState([]);
     const [cajerosDisponibles, setCajerosDisponibles] = useState([]);
     const [productosDisponibles, setProductosDisponibles] = useState([]);
+    const [cantidadesTemp, setCantidadesTemp] = useState({});
 
     const agregarProducto = (producto, cantidad) => {
         if (!cantidad || cantidad < 1) return;
@@ -146,15 +147,21 @@ const RegistrarVenta = () => {
                             <td>{producto.stock_actual}</td>
                             <td>${Number(producto.precio_venta).toFixed(2)}</td>
                             <td>
-                                <input
-                                    type="number"
-                                    min="1"
-                                    onChange={e => producto.tempCantidad = parseInt(e.target.value)}
-                                />
+                            <input
+                                type="number"
+                                min="1"
+                                value={cantidadesTemp[producto.codigo] || ''}
+                                onChange={e => {
+                                    const valor = parseInt(e.target.value) || '';
+                                    setCantidadesTemp({ ...cantidadesTemp, [producto.codigo]: valor });
+                                }}
+                            />
                             </td>
-                            <td>$0.00</td>
                             <td>
-                                <button onClick={() => agregarProducto(producto, producto.tempCantidad)}>+</button>
+                                ${((cantidadesTemp[producto.codigo] || 0) * producto.precio_venta).toFixed(2)}
+                            </td>
+                            <td>
+                            <button onClick={() => agregarProducto(producto, cantidadesTemp[producto.codigo] || 0)}>+</button>
                             </td>
                         </tr>
                 ))}

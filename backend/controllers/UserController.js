@@ -21,6 +21,15 @@ class UserController {
             res.status(401).json({ message: 'Usuario o contraseña incorrectos' });
         }
     }
+
+    async obtenerTodosLosUsuarios(req, res) {
+        try {
+            const usuarios = await UserService.listarUsuarios();
+            res.status(200).json(usuarios); 
+        } catch (error) {
+            res.status(500).json({ message: `Error al listar los usuarios: ${error.message}` });
+        }
+    }
 }
 
 module.exports = new UserController();

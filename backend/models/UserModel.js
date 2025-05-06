@@ -25,6 +25,12 @@ class UserModel {
         );
         return result.rows[0];
     }
+
+    async listarUsuarios() {
+        const query = `SELECT * FROM Usuario`;
+        const result = await Database.query(query);
+        return result.rows; 
+    }
 }
 
 module.exports = new UserModel();

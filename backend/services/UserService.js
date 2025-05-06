@@ -23,6 +23,10 @@ class UserService {
             rol: usuario.rol
         };
     }
+
+    async listarUsuarios() {
+        return await UserModel.listarUsuarios();
+    } 
 }
 
 module.exports = new UserService();

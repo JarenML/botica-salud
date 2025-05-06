@@ -3,12 +3,8 @@ import React, { useState, useEffect } from 'react';
 import '../styles/register_sale.css';
 import clientService from '../services/client.service';
 import userService from '../services/user.service';
+import productService from '../services/product.service';
 
-const productosDisponibles = [
-    { codigo: 'MED001', nombre: 'Paracetamol 500mg', stock: 150, precio: 5.99 },
-    { codigo: 'MED002', nombre: 'Ibuprofeno 400mg', stock: 85, precio: 7.5 },
-    { codigo: 'MED003', nombre: 'Amoxicilina 500mg', stock: 200, precio: 12.99 },
-];
 
 const RegistrarVenta = () => {
     const [cliente, setCliente] = useState('');
@@ -18,6 +14,7 @@ const RegistrarVenta = () => {
     const [busqueda, setBusqueda] = useState('');
     const [clientesDisponibles, setClientesDisponibles] = useState([]);
     const [cajerosDisponibles, setCajerosDisponibles] = useState([]);
+    const [productosDisponibles, setProductosDisponibles] = useState([]);
 
     const agregarProducto = (producto, cantidad) => {
         if (!cantidad || cantidad < 1) return;
@@ -59,6 +56,19 @@ const RegistrarVenta = () => {
         };
     
         fetchCajeros();
+    }, []);
+
+    useEffect(() => {
+        const fetchProductos = async () => {
+            try {
+                const res = await productService.listProducts();
+                setProductosDisponibles(res.data);
+            } catch (error) {
+                console.error('error al obtener productos:', error);
+            }
+        };
+    
+        fetchProductos();
     }, []);
 
     const subtotal = carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
@@ -131,22 +141,22 @@ const RegistrarVenta = () => {
                         )
                         .map(producto => (
                             <tr key={producto.codigo}>
-                                <td>{producto.codigo}</td>
-                                <td>{producto.nombre}</td>
-                                <td>{producto.stock}</td>
-                                <td>${producto.precio.toFixed(2)}</td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        min="1"
-                                        onChange={e => producto.tempCantidad = parseInt(e.target.value)}
-                                    />
-                                </td>
-                                <td>$0.00</td>
-                                <td>
-                                    <button onClick={() => agregarProducto(producto, producto.tempCantidad)}>+</button>
-                                </td>
-                            </tr>
+                            <td>{producto.codigo}</td>
+                            <td>{producto.nombre}</td>
+                            <td>{producto.stock_actual}</td>
+                            <td>${Number(producto.precio_venta).toFixed(2)}</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    onChange={e => producto.tempCantidad = parseInt(e.target.value)}
+                                />
+                            </td>
+                            <td>$0.00</td>
+                            <td>
+                                <button onClick={() => agregarProducto(producto, producto.tempCantidad)}>+</button>
+                            </td>
+                        </tr>
                 ))}
                 </tbody>
             </table>

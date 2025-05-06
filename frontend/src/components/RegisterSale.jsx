@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/register_sale.css';
 import clientService from '../services/client.service';
+import userService from '../services/user.service';
 
 const productosDisponibles = [
     { codigo: 'MED001', nombre: 'Paracetamol 500mg', stock: 150, precio: 5.99 },
@@ -16,6 +17,7 @@ const RegistrarVenta = () => {
     const [carrito, setCarrito] = useState([]);
     const [busqueda, setBusqueda] = useState('');
     const [clientesDisponibles, setClientesDisponibles] = useState([]);
+    const [cajerosDisponibles, setCajerosDisponibles] = useState([]);
 
     const agregarProducto = (producto, cantidad) => {
         if (!cantidad || cantidad < 1) return;
@@ -45,6 +47,20 @@ const RegistrarVenta = () => {
         fetchClientes();
     }, []);
 
+    useEffect(() => {
+        const fetchCajeros = async () => {
+            try {
+                const data = await userService.listUsers();
+                const soloCajeros = data.filter(user => user.rol === 'cajero');
+                setCajerosDisponibles(soloCajeros);
+            } catch (error) {
+                console.error('error al obtener cajeros:', error);
+            }
+        };
+    
+        fetchCajeros();
+    }, []);
+
     const subtotal = carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
     const iva = subtotal * 0.16;
     const total = subtotal + iva;
@@ -63,10 +79,14 @@ const RegistrarVenta = () => {
                 ))}
             </select>
 
-                <select value={cajero} onChange={e => setCajero(e.target.value)}>
-                    <option value="">Seleccionar cajero...</option>
-                    <option value="cajero1">Cajero 1</option>
-                </select>
+            <select value={cajero} onChange={e => setCajero(e.target.value)}>
+                <option value="">Seleccionar cajero...</option>
+                {cajerosDisponibles.map(c => (
+                    <option key={c.id_usuario} value={c.id_usuario}>
+                        {c.nombre} {c.apellidos}
+                    </option>
+                ))}
+            </select>
 
                 
                 <div className="metodo-pago">

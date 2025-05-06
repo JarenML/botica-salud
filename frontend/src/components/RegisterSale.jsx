@@ -1,6 +1,7 @@
 // src/components/RegistrarVenta.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/register_sale.css';
+import clientService from '../services/client.service';
 
 const productosDisponibles = [
     { codigo: 'MED001', nombre: 'Paracetamol 500mg', stock: 150, precio: 5.99 },
@@ -14,6 +15,7 @@ const RegistrarVenta = () => {
     const [metodoPago, setMetodoPago] = useState('Efectivo');
     const [carrito, setCarrito] = useState([]);
     const [busqueda, setBusqueda] = useState('');
+    const [clientesDisponibles, setClientesDisponibles] = useState([]);
 
     const agregarProducto = (producto, cantidad) => {
         if (!cantidad || cantidad < 1) return;
@@ -30,6 +32,19 @@ const RegistrarVenta = () => {
         setCarrito(carrito.filter(item => item.codigo !== codigo));
     };
 
+    useEffect(() => {
+        const fetchClientes = async () => {
+            try {
+                const data = await clientService.listClients();
+                setClientesDisponibles(data);
+            } catch (error) {
+                console.error('error al obtener clientes:', error);
+            }
+        };
+    
+        fetchClientes();
+    }, []);
+
     const subtotal = carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
     const iva = subtotal * 0.16;
     const total = subtotal + iva;
@@ -39,10 +54,14 @@ const RegistrarVenta = () => {
             <h2>Registrar Venta</h2>
 
             <div className="form-venta">
-                <select value={cliente} onChange={e => setCliente(e.target.value)}>
-                    <option value="">Seleccionar cliente...</option>
-                    <option value="cliente1">Cliente 1</option>
-                </select>
+            <select value={cliente} onChange={e => setCliente(e.target.value)}>
+                <option value="">Seleccionar cliente...</option>
+                {clientesDisponibles.map(c => (
+                    <option key={c.id_cliente} value={c.id_cliente}>
+                        {c.nombre}
+                    </option>
+                ))}
+            </select>
 
                 <select value={cajero} onChange={e => setCajero(e.target.value)}>
                     <option value="">Seleccionar cajero...</option>

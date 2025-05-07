@@ -44,7 +44,7 @@ const RegistrarVenta = () => {
         if (existente) {
             existente.cantidad += cantidad;
         } else {
-            carrito.push({ ...producto, cantidad });
+            carrito.push({ ...producto, cantidad, id_producto: producto.id_producto });
         }
     
         setCarrito([...carrito]);
@@ -78,19 +78,29 @@ const RegistrarVenta = () => {
     
         try {
             await saleService.createSale(venta);
+    
+            // Actualizar stock de cada producto vendido
+            for (const item of carrito) {
+                const nuevoStock = item.stock_actual - item.cantidad;
+                await productService.updateStock(item.id_producto, nuevoStock);
+            }
+    
             alert('Venta registrada con éxito');
-            // reiniciar formulario
+    
+            // Reiniciar formulario
             setCliente('');
             setCajero('');
             setMetodoPago('Efectivo');
             setCarrito([]);
             setCantidadesTemp({});
             setBusqueda('');
+            fetchProductos();
         } catch (error) {
             console.error('error al crear venta:', error);
             setErrorMessage('Hubo un error al registrar la venta.');
         }
     };
+    
 
     const eliminarProducto = codigo => {
         setCarrito(carrito.filter(item => item.codigo !== codigo));
@@ -123,16 +133,16 @@ const RegistrarVenta = () => {
         fetchCajeros();
     }, []);
 
+    const fetchProductos = async () => {
+        try {
+            const res = await productService.listProducts();
+            setProductosDisponibles(res.data);
+        } catch (error) {
+            console.error('error al obtener productos:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchProductos = async () => {
-            try {
-                const res = await productService.listProducts();
-                setProductosDisponibles(res.data);
-            } catch (error) {
-                console.error('error al obtener productos:', error);
-            }
-        };
-    
         fetchProductos();
     }, []);
 

@@ -12,7 +12,7 @@ const productService = {
         if(isFormData) {
             console.log("Es formData") ;
         }else {
-            console.log("No es FormData");
+            console.log("No esa FormData");
             
         }
 
@@ -29,6 +29,11 @@ const productService = {
 
     deleteProduct: async (id) => {
         const res = await api.delete(`/productos/${id}`);
+        return res.data;
+    },
+
+    updateStock: async (id, stock_actual) => {
+        const res = await api.patch(`/productos/${id}/stock`, { stock_actual });
         return res.data;
     }
 };

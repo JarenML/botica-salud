@@ -8,5 +8,6 @@ router.get('/', ProductController.listarProductos);
 router.get('/:id', ProductController.obtenerProductoPorId); 
 router.put('/:id', upload.single('imagen'), ProductController.actualizarProducto);   
 router.delete('/:id', ProductController.eliminarProducto);  
+router.patch('/:id/stock', ProductController.actualizarStock);
 
 module.exports = router;

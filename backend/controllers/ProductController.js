@@ -67,6 +67,16 @@ class ProductController {
             res.status(400).json({ message: `Error al eliminar el producto: ${error.message}` });
         }
     }
+
+    async actualizarStock(req, res) {
+        try {
+            const { stock_actual } = req.body;
+            const productoActualizado = await ProductService.actualizarStock(req.params.id, stock_actual);
+            res.status(200).json(productoActualizado); 
+        } catch (error) {
+            res.status(400).json({ message: `Error al actualizar el stock: ${error.message}` });
+        }
+    }
 }
 
 module.exports = new ProductController();

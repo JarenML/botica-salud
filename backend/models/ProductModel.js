@@ -119,6 +119,17 @@ class ProductModel {
         const result = await db.query(query, [id]);
         return result.rows[0]; 
     }
+
+    async actualizarStock(id, stock_actual) {
+        const query = `
+        UPDATE Producto
+        SET stock_actual = $1
+        WHERE id_producto = $2
+        RETURNING *`;
+        
+        const result = await db.query(query, [stock_actual, id]);
+        return result.rows[0]; 
+    }
 }
 
 module.exports = new ProductModel();

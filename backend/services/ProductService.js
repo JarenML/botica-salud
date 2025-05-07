@@ -33,6 +33,14 @@ class ProductService {
         }
         return await ProductModel.eliminarProducto(id);
     }
+
+    async actualizarStock(id, stock_actual) {
+        const productoExistente = await ProductModel.obtenerProductoPorId(id);
+        if (!productoExistente) {
+            throw new Error('Producto no encontrado');
+        }
+        return await ProductModel.actualizarStock(id, stock_actual);
+    }
 }
 
 module.exports = new ProductService();

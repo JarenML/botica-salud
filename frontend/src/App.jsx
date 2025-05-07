@@ -15,6 +15,7 @@ function App() {
     const location = useLocation(); 
     const hideHeaderRoutes = ['/', '/registro']; 
     const showHeader = !hideHeaderRoutes.includes(location.pathname); 
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
 
     return (
         <>
@@ -23,12 +24,33 @@ function App() {
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/registro" element={<RegisterPage />} />
                 <Route path="/home" element={<HomePage />} />
-                <Route path="/inventario" element={<InventarioPage />} />
-                <Route path="/categorias" element={<CategoryPage />} />
-                <Route path="/proveedores" element={<SupplierPage />} /> 
-                <Route path="/clientes" element={<ClientPage />} />
-                <Route path='/registro_venta' element={<RegisterSalePage/>}/>
-                <Route path='/ventas' element={<SalePage/>}/>
+                <Route path="/inventario" element={
+                    usuario.rol === 'cajero' ? <HomePage />
+                    : usuario.rol === 'farmaceutico' ?  <HomePage /> 
+                    : <InventarioPage/>
+                } />
+                <Route path="/categorias" element={
+                    usuario.rol === 'cajero' ? <HomePage />
+                    : usuario.rol === 'farmaceutico' ?  <HomePage /> 
+                    : <CategoryPage />
+                } />
+                <Route path="/proveedores" element={
+                    usuario.rol === 'cajero' ? <HomePage />
+                    : usuario.rol === 'farmaceutico' ?  <HomePage /> 
+                    : <SupplierPage />
+                } /> 
+                <Route path="/clientes" element={
+                    usuario.rol === 'cajero' ?  <HomePage /> 
+                    : <ClientPage />}
+                />
+                <Route path='/registro_venta' element={
+                    usuario.rol === 'cajero' ?  <HomePage /> 
+                    : <RegisterSalePage/>
+                }/>
+                <Route path='/ventas' element={
+                    usuario.rol === 'farmaceutico' ?  <HomePage /> 
+                    : <SalePage/>
+                }/>
             </Routes>
         </>
     );

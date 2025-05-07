@@ -77,7 +77,7 @@ const RegistrarVenta = () => {
         };
     
         try {
-            await saleService.createService(venta);
+            await saleService.createSale(venta);
             alert('Venta registrada con éxito');
             // reiniciar formulario
             setCliente('');

@@ -7,11 +7,15 @@ const saleService = {
         return res.data;
     },
 
-    createService: async (data) => {
+    createSale: async (data) => {
         const res = await api.post('/ventas', data);
         return res.data;
     },
 
+    changeStateService: async (id, estado) => {
+        const res = await api.patch(`/ventas/${id}/estado`, {estado});
+        return res.data;
+    }
 
 };
 

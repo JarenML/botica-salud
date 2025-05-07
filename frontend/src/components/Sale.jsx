@@ -12,6 +12,7 @@ const Ventas = () => {
             try {
                 const data = await saleService.listSales();
                 const formatoVentas = data.map((venta) => ({
+                    id: venta.id_venta, // ← nuevo
                     codigo: venta.codigo_venta,
                     fecha: new Date(venta.fecha_creacion).toLocaleDateString('es-PE'),
                     cliente: venta.cliente_nombre,
@@ -82,7 +83,30 @@ const Ventas = () => {
                                     {venta.estado}
                                 </span>
                             </td>
-                            <td>⋮</td>
+                            <td>
+                                <select
+                                    value={venta.estado}
+                                    onChange={async (e) => {
+                                        const nuevoEstado = e.target.value;
+                                        try {
+                                            await saleService.changeStateService(venta.id, nuevoEstado.toLowerCase());
+                                            setVentas((prevVentas) =>
+                                                prevVentas.map((v, index) =>
+                                                    index === i ? { ...v, estado: capitalizar(nuevoEstado) } : v
+                                                )
+                                            );
+                                        } catch (error) {
+                                            console.error('Error al cambiar el estado:', error);
+                                        }
+                                    }}
+                                >
+                                    {['Pendiente', 'Pagado', 'Anulado'].map((estado) => (
+                                        <option key={estado} value={estado}>
+                                            {estado}
+                                        </option>
+                                    ))}
+                                </select>
+                            </td>
                         </tr>
                     ))}
                 </tbody>

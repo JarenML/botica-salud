@@ -53,6 +53,16 @@ class SaleController {
             res.status(400).json({ message: `Error al eliminar la venta: ${error.message}` });
         }
     }
+
+    async actualizarEstadoVenta(req, res) {
+        try {
+            const { estado } = req.body;
+            const ventaActualizada = await SaleService.actualizarEstadoVenta(req.params.id, estado);
+            res.status(200).json(ventaActualizada);
+        } catch (error) {
+            res.status(400).json({ message: `Error al actualizar el estado: ${error.message}` });
+        }
+    }
 }
 
 module.exports = new SaleController();

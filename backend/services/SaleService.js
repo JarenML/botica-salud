@@ -32,6 +32,14 @@ class SaleService {
         }
         return await SaleModel.eliminarVenta(id);
     }
+
+    async actualizarEstadoVenta(id, estado) {
+        const ventaExistente = await SaleModel.obtenerVentaPorId(id);
+        if (!ventaExistente) {
+            throw new Error('Venta no encontrada');
+        }
+        return await SaleModel.actualizarEstadoVenta(id, estado);
+    }
 }
 
 module.exports = new SaleService();

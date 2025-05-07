@@ -78,6 +78,16 @@ class SaleModel {
         const result = await db.query(query, [id]);
         return result.rows[0]; 
     }
+
+    async actualizarEstadoVenta(id, estado) {
+        const query = `
+            UPDATE Venta
+            SET estado = $1
+            WHERE id_venta = $2
+            RETURNING *`;
+        const result = await db.query(query, [estado, id]);
+        return result.rows[0];
+    }
 }
 
 module.exports = new SaleModel();

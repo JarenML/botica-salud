@@ -1,16 +1,25 @@
-// src/components/Header.jsx
 import React, { useEffect, useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa'; 
+import { useNavigate } from 'react-router-dom';
 import '../styles/header.css';
 
 const Header = () => {
     const [usuario, setUsuario] = useState({ nombre: 'Invitado', rol: 'sin rol' });
-    
+    const [showMenu, setShowMenu] = useState(false);
+    const navigate = useNavigate();
+
     useEffect(() => {
         const usuarioLogueado = JSON.parse(localStorage.getItem('usuario')) || { nombre: 'Usuario', rol: 'farmaceutico' };
         setUsuario(usuarioLogueado);
     }, []);
-    
+
+    const toggleMenu = () => setShowMenu(!showMenu);
+
+    const handleLogout = () => {
+        localStorage.removeItem('usuario');
+        navigate('/');
+    };
+
     return (
         <header className="home-header">
             <div className="header-left">
@@ -28,12 +37,17 @@ const Header = () => {
                 </ul>
             </nav>
             <div className="header-right">
-                <div className="user-display">
+                <div className="user-display" onClick={toggleMenu}>
                     <FaUserCircle className="user-icon" />
                     <div className="user-info">
                         <span className="user-name">{usuario.nombre}</span>
                         <span className="user-role">{usuario.rol}</span>
                     </div>
+                    {showMenu && (
+                        <div className="user-menu">
+                            <button onClick={handleLogout}>Cerrar sesión</button>
+                        </div>
+                    )}
                 </div>
             </div>
         </header>

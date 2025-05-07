@@ -1,60 +1,68 @@
-//src/App.jsx
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import Header from './components/Header'; 
+import Header from './components/Header';
+import PrivateRoute from './components/PrivateRoute';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import HomePage from './pages/Home/HomePage';
 import InventarioPage from './pages/Inventario/InventarioPage';
 import CategoryPage from './pages/Category/CategoryPage';
-import SupplierPage from './pages/Supplier/SupplierPage'; 
+import SupplierPage from './pages/Supplier/SupplierPage';
 import ClientPage from './pages/Client/ClientPage';
 import RegisterSalePage from './pages/Sale/RegisterSale';
 import SalePage from './pages/Sale/SalePage';
 
 function App() {
-    const location = useLocation(); 
-    const hideHeaderRoutes = ['/', '/registro']; 
-    const showHeader = !hideHeaderRoutes.includes(location.pathname); 
+    const location = useLocation();
+    const hideHeaderRoutes = ['/', '/registro'];
+    const showHeader = !hideHeaderRoutes.includes(location.pathname);
     const usuario = JSON.parse(localStorage.getItem('usuario'));
+    const rol = usuario?.rol || 'invitado';
 
     return (
         <>
-            {showHeader && <Header />} 
+            {showHeader && <Header />}
             <Routes>
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/registro" element={<RegisterPage />} />
-                <Route path="/home" element={<HomePage />} />
+                
+                <Route path="/home" element={
+                    <PrivateRoute><HomePage /></PrivateRoute>
+                } />
                 <Route path="/inventario" element={
-                    usuario.rol === 'cajero' ? <HomePage />
-                    : usuario.rol === 'farmaceutico' ?  <HomePage /> 
-                    : <InventarioPage/>
+                    <PrivateRoute>
+                        {rol === 'admin' ? <InventarioPage /> : <HomePage />}
+                    </PrivateRoute>
                 } />
                 <Route path="/categorias" element={
-                    usuario.rol === 'cajero' ? <HomePage />
-                    : usuario.rol === 'farmaceutico' ?  <HomePage /> 
-                    : <CategoryPage />
+                    <PrivateRoute>
+                        {rol === 'admin' ? <CategoryPage /> : <HomePage />}
+                    </PrivateRoute>
                 } />
                 <Route path="/proveedores" element={
-                    usuario.rol === 'cajero' ? <HomePage />
-                    : usuario.rol === 'farmaceutico' ?  <HomePage /> 
-                    : <SupplierPage />
-                } /> 
+                    <PrivateRoute>
+                        {rol === 'admin' ? <SupplierPage /> : <HomePage />}
+                    </PrivateRoute>
+                } />
                 <Route path="/clientes" element={
-                    usuario.rol === 'cajero' ?  <HomePage /> 
-                    : <ClientPage />}
-                />
-                <Route path='/registro_venta' element={
-                    usuario.rol === 'cajero' ?  <HomePage /> 
-                    : <RegisterSalePage/>
-                }/>
-                <Route path='/ventas' element={
-                    usuario.rol === 'farmaceutico' ?  <HomePage /> 
-                    : <SalePage/>
-                }/>
+                    <PrivateRoute>
+                        {rol === 'farmaceutico' || rol === 'admin' ? <ClientPage /> : <HomePage />}
+                    </PrivateRoute>
+                } />
+                <Route path="/registro_venta" element={
+                    <PrivateRoute>
+                        {rol === 'farmaceutico' || rol === 'admin' ? <RegisterSalePage /> : <HomePage />}
+                    </PrivateRoute>
+                } />
+                <Route path="/ventas" element={
+                    <PrivateRoute>
+                        {rol === 'admin' || rol === 'cajero' ? <SalePage /> : <HomePage />}
+                    </PrivateRoute>
+                } />
             </Routes>
         </>
     );
 }
+
 
 function AppWrapper() {
     return (

@@ -152,3 +152,40 @@
     color: var(--primary-light);
     text-transform: capitalize;
 }
+
+.user-display {
+    position: relative;
+    cursor: pointer;
+}
+
+.user-menu {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #1a1a2e; 
+    border: 1px solid #2d2d42;
+    padding: 10px 16px;
+    border-radius: 6px;
+    z-index: 100;
+    min-width: 160px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+}
+
+.user-menu button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: #e2e2e2;
+    width: 100%;
+    text-align: left;
+    padding: 6px 0;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.user-menu button:hover {
+    color: #4cc9f0;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}

@@ -83,7 +83,7 @@ const Ventas = () => {
                                     {venta.estado}
                                 </span>
                             </td>
-                            <td>
+                            <td className="acciones">
                                 <select
                                     value={venta.estado}
                                     onChange={async (e) => {
@@ -106,6 +106,21 @@ const Ventas = () => {
                                         </option>
                                     ))}
                                 </select>
+                                <button
+                                    className="btn-eliminar"
+                                    onClick={async () => {
+                                        if (confirm(`¿Estás seguro de eliminar la venta ${venta.codigo}?`)) {
+                                            try {
+                                                await saleService.deleteSale(venta.id);
+                                                setVentas((prevVentas) => prevVentas.filter((v) => v.id !== venta.id));
+                                            } catch (error) {
+                                                console.error('Error al eliminar la venta:', error);
+                                            }
+                                        }
+                                    }}
+                                >
+                                    🗑️
+                                </button>
                             </td>
                         </tr>
                     ))}

@@ -141,3 +141,16 @@
     background-color: #4cc9f0;
     color: #1a1a2e;
 }
+
+
+.btn-eliminar {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: red;
+    margin-left: 10px;
+    font-size: 1rem;
+}
+.btn-eliminar:hover {
+    color: darkred;
+}

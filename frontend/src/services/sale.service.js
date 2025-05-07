@@ -15,6 +15,11 @@ const saleService = {
     changeStateService: async (id, estado) => {
         const res = await api.patch(`/ventas/${id}/estado`, {estado});
         return res.data;
+    },
+
+    deleteSale: async (id) => {
+        const res = await api.delete(`/ventas/${id}`);
+        return res.data;
     }
 
 };

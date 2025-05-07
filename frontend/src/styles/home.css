@@ -1,24 +1,81 @@
-/* Ruta: /src/styles/home.css */
-
+/* src/styles/home.css */
 
 /* Contenedor principal - ocupa toda la ventana */
 .home-page {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 88vh;
     width: 98vw;
     overflow: hidden;
 }
 
-
 /* CONTENIDO PRINCIPAL - OCUPA TODO EL ESPACIO DISPONIBLE */
 .home-content {
     flex: 1;
-    padding: 2rem 3rem;
+    padding: 1rem 2rem;
     display: flex;
     flex-direction: column;
-    width: 98%;
+    width: 100%;
     background-color: #121212;
+}
+
+/* Sección superior de información en línea */
+.top-info-line {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+/* Estilos modificados para las cajas de información superior */
+.info-box {
+    background-color: #1f1f1f;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(170, 214, 166, 0.2);
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.info-box h4 {
+    margin: 0 0 1.2rem;
+    color: #f8f7f8;
+    font-size: 1.3rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.info-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Colores específicos para cada icono */
+.stock-icon { color: #dd0606; }
+.ventas-icon { color: #41e979; }
+.clientes-icon { color: #f1de07; }
+.inventario-icon { color: #9f05e1; }
+
+.info-box ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.info-box li {
+    margin-bottom: 0.5rem;
+    font-size: 1.05rem;
+    color: #e2e2e2;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.info-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(76, 201, 240, 0.1);
 }
 
 /* Grid de tarjetas 3x3 que ocupa todo el ancho */
@@ -33,7 +90,7 @@
 /* Tarjetas con altura proporcional */
 .card {
     background-color: #1f1f1f;
-    padding: 1.5rem;
+    padding: 1.0rem;
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -55,7 +112,7 @@
 }
 
 .card-icon {
-    font-size: 2.5rem;
+    font-size: 4rem;
     margin-bottom: 1rem;
     color: #4cc9f0;
     transition: all 0.3s ease;
@@ -81,84 +138,16 @@
     line-height: 1.5;
 }
 
-/* Sección de información adicional - 100% ancho */
-.additional-info {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    width: 100%;
-    margin-top: 2rem;
-}
-
-.info-box {
-    background-color: #1f1f1f;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    border: 1px solid #2a2a2a;
-    height: 100%;
-}
-
-.info-box:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 16px rgba(76, 201, 240, 0.1);
-    border-color: #4cc9f0;
-}
-
-.info-box h4 {
-    margin: 0 0 1rem;
-    color: #4cc9f0;
-    font-size: 1.2rem;
-    font-weight: 500;
-    position: relative;
-    padding-bottom: 0.5rem;
-}
-
-.info-box h4::after {
-    content: '';
-    position: absolute;
-    width: 40px;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: #4cc9f0;
-}
-
-.info-box ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.info-box li {
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-    color: #e2e2e2;
-    position: relative;
-    padding-left: 1.2rem;
-    line-height: 1.5;
-}
-
-.info-box li::before {
-    content: '•';
-    color: #4cc9f0;
-    position: absolute;
-    left: 0;
-}
-
 /* Responsive Design */
 @media (max-width: 1200px) {
     .cards-container {
         grid-template-columns: repeat(2, 1fr);
     }
     
-    .additional-info {
-        grid-template-columns: 1fr;
+    .top-info-line {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
-
-
 
 @media (max-width: 768px) {
     .home-content {
@@ -169,8 +158,11 @@
         grid-template-columns: 1fr;
     }
     
+    .top-info-line {
+        grid-template-columns: 1fr;
+    }
+    
     .card {
         min-height: 180px;
     }
 }
-

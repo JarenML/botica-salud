@@ -1,4 +1,4 @@
-//src/components/client/ClientList.jsx
+// src/components/client/ClientList.jsx
 import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrash, FaPlus, FaSave, FaTimes, FaUser, FaSearch, FaIdCard, FaPhone, FaEnvelope, FaMapMarkerAlt, FaBirthdayCake } from 'react-icons/fa';
 import clientService from '../../services/client.service';
@@ -89,7 +89,7 @@ const ClientList = () => {
             if (editingClient) {
                 await clientService.updateClient(editingClient.id_cliente, formData);
                 setSuccessMessage('Cliente actualizado correctamente');
-                setShowForm(false); // Cerrar el formulario después de guardar
+                setShowForm(false);
             } else {
                 await clientService.createClient(formData);
                 setSuccessMessage('Cliente creado correctamente');
@@ -166,104 +166,106 @@ const ClientList = () => {
             </header>
 
             {showForm && (
-                <div className="client-form-container">
-                    <form onSubmit={handleSubmit} className="client-form">
-                        <h2>{editingClient ? 'Editar Cliente' : 'Nuevo Cliente'}</h2>
-                        
-                        <div className="form-grid">
-                            <div className="form-group">
-                                <label><FaIdCard /> DNI *</label>
-                                <input
-                                    name="dni"
-                                    value={formData.dni}
-                                    onChange={handleChange}
-                                    className={errors.dni ? 'error' : ''}
-                                    maxLength="8"
-                                />
-                                {errors.dni && <span className="error-message">{errors.dni}</span>}
-                            </div>
+                <div className="form-modal">
+                    <div className="form-modal-content">
+                        <form onSubmit={handleSubmit} className="client-form">
+                            <h2>{editingClient ? 'Editar Cliente' : 'Nuevo Cliente'}</h2>
                             
-                            <div className="form-group">
-                                <label>Nombre *</label>
-                                <input
-                                    name="nombre"
-                                    value={formData.nombre}
-                                    onChange={handleChange}
-                                    className={errors.nombre ? 'error' : ''}
-                                    maxLength="50"
-                                />
-                                {errors.nombre && <span className="error-message">{errors.nombre}</span>}
+                            <div className="form-grid">
+                                <div className="form-group">
+                                    <label><FaIdCard /> DNI *</label>
+                                    <input
+                                        name="dni"
+                                        value={formData.dni}
+                                        onChange={handleChange}
+                                        className={errors.dni ? 'error' : ''}
+                                        maxLength="8"
+                                    />
+                                    {errors.dni && <span className="error-message">{errors.dni}</span>}
+                                </div>
+                                
+                                <div className="form-group">
+                                    <label>Nombre *</label>
+                                    <input
+                                        name="nombre"
+                                        value={formData.nombre}
+                                        onChange={handleChange}
+                                        className={errors.nombre ? 'error' : ''}
+                                        maxLength="50"
+                                    />
+                                    {errors.nombre && <span className="error-message">{errors.nombre}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Apellido *</label>
+                                    <input
+                                        name="apellido"
+                                        value={formData.apellido}
+                                        onChange={handleChange}
+                                        className={errors.apellido ? 'error' : ''}
+                                        maxLength="50"
+                                    />
+                                    {errors.apellido && <span className="error-message">{errors.apellido}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label><FaPhone /> Teléfono</label>
+                                    <input
+                                        name="telefono"
+                                        value={formData.telefono}
+                                        onChange={handleChange}
+                                        className={errors.telefono ? 'error' : ''}
+                                        maxLength="9"
+                                    />
+                                    {errors.telefono && <span className="error-message">{errors.telefono}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label><FaEnvelope /> Email *</label>
+                                    <input
+                                        name="email"
+                                        type="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        className={errors.email ? 'error' : ''}
+                                    />
+                                    {errors.email && <span className="error-message">{errors.email}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label><FaMapMarkerAlt /> Dirección</label>
+                                    <input
+                                        name="direccion"
+                                        value={formData.direccion}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label><FaBirthdayCake /> Fecha Nacimiento</label>
+                                    <input
+                                        name="fecha_nacimiento"
+                                        type="date"
+                                        value={formData.fecha_nacimiento}
+                                        onChange={handleChange}
+                                        className={errors.fecha_nacimiento ? 'error' : ''}
+                                    />
+                                    {errors.fecha_nacimiento && <span className="error-message">{errors.fecha_nacimiento}</span>}
+                                </div>
                             </div>
 
-                            <div className="form-group">
-                                <label>Apellido *</label>
-                                <input
-                                    name="apellido"
-                                    value={formData.apellido}
-                                    onChange={handleChange}
-                                    className={errors.apellido ? 'error' : ''}
-                                    maxLength="50"
-                                />
-                                {errors.apellido && <span className="error-message">{errors.apellido}</span>}
+                            <div className="form-buttons">
+                                <button type="submit" className="btn-primary">
+                                    {editingClient ? <FaSave /> : <FaPlus />}
+                                    {editingClient ? ' Guardar' : ' Crear Cliente'}
+                                </button>
+                                
+                                <button type="button" onClick={cancelEdit} className="btn-cancel">
+                                    <FaTimes /> Cancelar
+                                </button>
                             </div>
-
-                            <div className="form-group">
-                                <label><FaPhone /> Teléfono</label>
-                                <input
-                                    name="telefono"
-                                    value={formData.telefono}
-                                    onChange={handleChange}
-                                    className={errors.telefono ? 'error' : ''}
-                                    maxLength="9"
-                                />
-                                {errors.telefono && <span className="error-message">{errors.telefono}</span>}
-                            </div>
-
-                            <div className="form-group">
-                                <label><FaEnvelope /> Email *</label>
-                                <input
-                                    name="email"
-                                    type="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    className={errors.email ? 'error' : ''}
-                                />
-                                {errors.email && <span className="error-message">{errors.email}</span>}
-                            </div>
-
-                            <div className="form-group">
-                                <label><FaMapMarkerAlt /> Dirección</label>
-                                <input
-                                    name="direccion"
-                                    value={formData.direccion}
-                                    onChange={handleChange}
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label><FaBirthdayCake /> Fecha Nacimiento</label>
-                                <input
-                                    name="fecha_nacimiento"
-                                    type="date"
-                                    value={formData.fecha_nacimiento}
-                                    onChange={handleChange}
-                                    className={errors.fecha_nacimiento ? 'error' : ''}
-                                />
-                                {errors.fecha_nacimiento && <span className="error-message">{errors.fecha_nacimiento}</span>}
-                            </div>
-                        </div>
-
-                        <div className="form-buttons">
-                            <button type="submit" className="btn-primary">
-                                {editingClient ? <FaSave /> : <FaPlus />}
-                                {editingClient ? ' Guardar' : ' Crear Cliente'}
-                            </button>
-                            
-                            <button type="button" onClick={cancelEdit} className="btn-cancel">
-                                <FaTimes /> Cancelar
-                            </button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             )}
 

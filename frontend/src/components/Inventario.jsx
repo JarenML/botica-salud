@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import '../styles/inventario.css';
-import Header from './Header';
 import productService from '../services/product.service';
 import categoryService from '../services/category.service';
 
@@ -128,14 +127,13 @@ const Inventario = () => {
         }
     };
     return (
-        
-        <div className="inventory-page">
-            <main className="inventory-content">
+        <div className="inventory-page-unique">
+            <main className="inventory-content-unique">
                 {modalVisible && (
-                <div className="modal-overlay">
-                    <div className="modal">
+                <div className="modal-overlay-unique">
+                    <div className="modal-unique">
                         <h2>{modoEdicion ? 'Editar producto' : 'Registrar nuevo producto'}</h2>
-                        <div className="modal-form">
+                        <div className="modal-form-unique">
                             <input name="codigo" placeholder="Código" value={nuevoProducto.codigo} onChange={handleChangeModal} />
                             <input name="nombre" placeholder="Nombre" value={nuevoProducto.nombre} onChange={handleChangeModal} />
                             <input name="imagen" type="file" accept="image/*" onChange={(e) => handleImagenUpload(e)} />
@@ -154,19 +152,19 @@ const Inventario = () => {
                             <input type="number" name="stock_minimo" placeholder="Stock mínimo" value={nuevoProducto.stock_minimo} onChange={handleChangeModal} />
                             <input name="ubicacion" placeholder="Ubicación" value={nuevoProducto.ubicacion} onChange={handleChangeModal} />
                         </div>
-                        <div className="modal-actions">
-                        <button className="save-button" onClick={handleGuardar}>{modoEdicion ? 'Actualizar' : 'Guardar'}</button>
-                            <button className="cancel-button" onClick={() => setModalVisible(false)}>Cancelar</button>
+                        <div className="modal-actions-unique">
+                        <button className="save-button-unique" onClick={handleGuardar}>{modoEdicion ? 'Actualizar' : 'Guardar'}</button>
+                            <button className="cancel-button-unique" onClick={() => setModalVisible(false)}>Cancelar</button>
                         </div>
                     </div>
                 </div>
             )}
-                <div className="inventory-header">
+                <div className="inventory-header-unique">
                     <h2>Inventario</h2>
-                    <button className="add-button" onClick={() => setModalVisible(true)}>+ Agregar Producto</button>
+                    <button className="add-button-unique" onClick={() => setModalVisible(true)}>+ Agregar Producto</button>
                 </div>
 
-                <div className="inventory-filters">
+                <div className="inventory-filters-unique">
                     <input
                         type="text"
                         placeholder="Buscar producto..."
@@ -189,17 +187,17 @@ const Inventario = () => {
                 {loading ? (
                     <p>Cargando productos...</p>
                 ) : (
-                    <div className="product-grid">
+                    <div className="product-grid-unique">
                         {products.map((product) => {
                             return (
-                                <div key={product.id_producto} className="product-card">
+                                <div key={product.id_producto} className="product-card-unique">
                                     <img src={`${import.meta.env.VITE_API_URL.replace('/api', '')}/images/${product.imagen}`} alt={product.nombre} />
                                     <h3>{product.nombre}</h3>
                                     <p>Stock: {product.stock_actual} unidades</p>
                                     <p className="price">S/ {Number(product.precio_venta).toFixed(2)}</p>
-                                    <div className="card-actions">
-                                        <button className="edit-button" onClick={() => handleEditar(product)}>✏️ Editar</button>
-                                        <button className="delete-button" onClick={() => handleEliminar(product.id_producto)}>🗑 Eliminar</button>
+                                    <div className="card-actions-unique">
+                                        <button className="edit-button-unique" onClick={() => handleEditar(product)}>✏️ Editar</button>
+                                        <button className="delete-button-unique" onClick={() => handleEliminar(product.id_producto)}>🗑 Eliminar</button>
                                     </div>
                                 </div>
                             );

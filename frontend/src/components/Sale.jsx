@@ -48,7 +48,7 @@ const Ventas = () => {
                     onChange={(e) => setBusqueda(e.target.value)}
                 />
                 <div className="ventas-filtros">
-                    {['Todas', 'Pendiente', 'Pagada', 'Anulado'].map((estado) => (
+                    {['Todas', 'Pendiente', 'Pagado', 'Anulado'].map((estado) => (
                         <button
                             key={estado}
                             className={filtro === estado ? 'activo' : ''}

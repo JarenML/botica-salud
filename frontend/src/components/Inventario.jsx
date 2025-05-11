@@ -91,6 +91,20 @@ const Inventario = () => {
     };
 
     const handleGuardar = async () => {
+
+        // validar si ya existe un producto con el mismo nombre
+        const nombreRepetido = products.some(product => {
+            const mismoNombre = product.nombre.trim().toLowerCase() === nuevoProducto.nombre.trim().toLowerCase();
+            // si esta en modo edicion, permitira tener el mismo nombre
+            const esElMismoProducto = modoEdicion && productoEditandoId === product.id_producto;
+            return mismoNombre && !esElMismoProducto;
+        });
+
+        if (nombreRepetido) {
+            alert("Ya existe un producto con ese nombre. Por favor, elige otro.");
+            return;
+        }
+
         try {
             const formData = new FormData();
             for (let key in nuevoProducto) {

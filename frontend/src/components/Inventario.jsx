@@ -13,6 +13,8 @@ const Inventario = () => {
     const [filtroNombre, setFiltroNombre] = useState('');
     const [filtroCategoria, setFiltroCategoria] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
+    const [popupConfirmVisible, setPopupConfirmVisible] = useState(false);
+    const [productoAEliminar, setProductoAEliminar] = useState(null);
     const [nuevoProducto, setNuevoProducto] = useState({
         codigo: '',
         nombre: '',
@@ -133,15 +135,20 @@ const Inventario = () => {
     };
 
     const handleEliminar = async (id_producto) => {
-        console.log(id_producto);
-        if (!confirm('¿Estás seguro de que deseas eliminar este producto?')) return;
+        setProductoAEliminar(id_producto);
+        setPopupConfirmVisible(true);
+    };
 
+    const confirmarEliminacion = async () => {
         try {
-            await productService.deleteProduct(id_producto);
-            setProducts((prev) => prev.filter((prod) => prod.id_producto !== id_producto));
-            console.log(`Producto ${id_producto} eliminado.`);
-        } catch (error) {
-            console.error('Error al eliminar el producto:', error);
+            await productService.deleteProduct(productoAEliminar);
+            setProducts(prev => prev.filter(prod => prod.id_producto !== productoAEliminar));
+            console.log(`Producto ${productoAEliminar} eliminado`);
+        } catch(error) {
+            console.log(`Error al eliminar el producto ${error}`);
+        } finally {
+            setPopupConfirmVisible(false);
+            setProductoAEliminar(null);
         }
     };
 
@@ -198,6 +205,18 @@ const Inventario = () => {
 
     return (
         <div className="inventory-page-unique">
+        {popupConfirmVisible && (
+            <div className="modal-overlay-unique">
+                <div className="modal-unique">
+                    <h3>¿Estás seguro de eliminar este producto?</h3>
+                    <p>Esta acción no se puede deshacer.</p>
+                    <div className="modal-actions-unique">
+                        <button className="delete-button-unique" onClick={confirmarEliminacion}>Sí, eliminar</button>
+                        <button className="cancel-button-unique" onClick={() => setPopupConfirmVisible(false)}>Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        )}
             <main className="inventory-content-unique">
                 {modalVisible && (
                     <div className="modal-overlay-unique">

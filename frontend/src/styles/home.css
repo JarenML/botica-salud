@@ -1,31 +1,32 @@
 /* src/styles/home.css */
 
-/* Contenedor principal - ocupa toda la ventana */
+/* Contenedor principal - crece con el contenido, sin cortar nada hacia abajo */
 .home-page {
     display: flex;
     flex-direction: column;
-    height: 88vh;
-    width: 98vw;
-    overflow: hidden;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
 }
 
-/* CONTENIDO PRINCIPAL - OCUPA TODO EL ESPACIO DISPONIBLE */
+/* CONTENIDO PRINCIPAL */
 .home-content {
     flex: 1;
-    padding: 1rem 2rem;
+    padding: 1.5rem 2rem;
     display: flex;
     flex-direction: column;
     width: 100%;
+    box-sizing: border-box;
     background-color: #121212;
 }
 
 /* Sección superior de información en línea */
 .top-info-line {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
     width: 100%;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 /* Estilos modificados para las cajas de información superior */
@@ -78,11 +79,11 @@
     box-shadow: 0 8px 16px rgba(76, 201, 240, 0.1);
 }
 
-/* Grid de tarjetas 3x3 que ocupa todo el ancho */
+/* Grid de tarjetas que ocupa todo el ancho y se adapta a cualquier tamaño de pantalla */
 .cards-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
     width: 100%;
     margin: 0 auto;
 }
@@ -139,30 +140,41 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
-    .cards-container {
-        grid-template-columns: repeat(2, 1fr);
+@media (max-width: 768px) {
+    .home-content {
+        padding: 1rem;
     }
-    
-    .top-info-line {
-        grid-template-columns: repeat(2, 1fr);
+
+    .top-info-line,
+    .cards-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .card {
+        min-height: 160px;
+        padding: 0.8rem;
+    }
+
+    .card-icon {
+        font-size: 3rem;
+    }
+
+    .info-box {
+        padding: 1.2rem;
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
     .home-content {
-        padding: 1.5rem;
+        padding: 0.75rem;
     }
-    
-    .cards-container {
-        grid-template-columns: 1fr;
+
+    .info-box h4 {
+        font-size: 1.1rem;
     }
-    
-    .top-info-line {
-        grid-template-columns: 1fr;
-    }
-    
-    .card {
-        min-height: 180px;
+
+    .card h3 {
+        font-size: 1.05rem;
     }
 }

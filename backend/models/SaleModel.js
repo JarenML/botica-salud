@@ -1,92 +1,75 @@
-const db = require('../config/db');
+const prisma = require('../config/prisma');
+
+const mapVenta = (venta) => {
+    if (!venta) return venta;
+    const { usuario, cliente, ...resto } = venta;
+    return {
+        ...resto,
+        usuario_nombre: usuario?.nombre,
+        cliente_nombre: cliente?.nombre,
+    };
+};
 
 class SaleModel {
     async crearVenta(datos) {
-        const query = `
-        INSERT INTO Venta (codigo_venta, usuario_id, cliente_id, total, metodo_pago, estado, observaciones)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING *`;
-        const result = await db.query(query, [
-            datos.codigo_venta,
-            datos.usuario_id,
-            datos.cliente_id,
-            datos.total,
-            datos.metodo_pago,
-            datos.estado,
-            datos.observaciones
-        ]);
-        return result.rows[0]; 
+        return prisma.venta.create({
+            data: {
+                codigo_venta: datos.codigo_venta,
+                usuario_id: Number(datos.usuario_id),
+                cliente_id: Number(datos.cliente_id),
+                total: datos.total,
+                metodo_pago: datos.metodo_pago,
+                estado: datos.estado,
+                observaciones: datos.observaciones,
+            }
+        });
     }
 
-    async listarVentas(codigo_venta=null) {
-        let query = `
-        SELECT 
-            v.*, 
-            u.nombre AS usuario_nombre, 
-            c.nombre AS cliente_nombre 
-        FROM Venta v
-        JOIN Usuario u ON v.usuario_id = u.id_usuario
-        JOIN Cliente c ON v.cliente_id = c.id_cliente`;
-
-
-        let values = []
+    async listarVentas(codigo_venta = null) {
+        const where = {};
         if (codigo_venta) {
-            query += ` WHERE v.codigo_venta ILIKE $1`;
-            values.push(`%${codigo_venta}%`);
+            where.codigo_venta = { contains: codigo_venta, mode: 'insensitive' };
         }
 
-        const result = await db.query(query, values);
-        return result.rows; 
+        const ventas = await prisma.venta.findMany({
+            where,
+            include: { usuario: true, cliente: true }
+        });
+        return ventas.map(mapVenta);
     }
 
     async obtenerVentaPorId(id) {
-        const query = `
-        SELECT 
-            v.*, 
-            u.nombre AS usuario_nombre, 
-            c.nombre AS cliente_nombre 
-        FROM Venta v
-        JOIN Usuario u ON v.usuario_id = u.id_usuario
-        JOIN Cliente c ON v.cliente_id = c.id_cliente
-        WHERE v.id_venta = $1`;
-        const result = await db.query(query, [id]);
-        return result.rows[0]; 
+        const venta = await prisma.venta.findUnique({
+            where: { id_venta: Number(id) },
+            include: { usuario: true, cliente: true }
+        });
+        return mapVenta(venta);
     }
 
     async actualizarVenta(id, datos) {
-        const query = `
-        UPDATE Venta
-        SET codigo_venta = $1, usuario_id = $2, cliente_id = $3, total = $4, 
-            metodo_pago = $5, estado = $6, observaciones = $7
-        WHERE id_venta = $8
-        RETURNING *`;
-        const result = await db.query(query, [
-            datos.codigo_venta,
-            datos.usuario_id,
-            datos.cliente_id,
-            datos.total,
-            datos.metodo_pago,
-            datos.estado,
-            datos.observaciones,
-            id
-        ]);
-        return result.rows[0]; 
+        return prisma.venta.update({
+            where: { id_venta: Number(id) },
+            data: {
+                codigo_venta: datos.codigo_venta,
+                usuario_id: Number(datos.usuario_id),
+                cliente_id: Number(datos.cliente_id),
+                total: datos.total,
+                metodo_pago: datos.metodo_pago,
+                estado: datos.estado,
+                observaciones: datos.observaciones,
+            }
+        });
     }
 
     async eliminarVenta(id) {
-        const query = `DELETE FROM Venta WHERE id_venta = $1 RETURNING *`;
-        const result = await db.query(query, [id]);
-        return result.rows[0]; 
+        return prisma.venta.delete({ where: { id_venta: Number(id) } });
     }
 
     async actualizarEstadoVenta(id, estado) {
-        const query = `
-            UPDATE Venta
-            SET estado = $1
-            WHERE id_venta = $2
-            RETURNING *`;
-        const result = await db.query(query, [estado, id]);
-        return result.rows[0];
+        return prisma.venta.update({
+            where: { id_venta: Number(id) },
+            data: { estado }
+        });
     }
 }
 

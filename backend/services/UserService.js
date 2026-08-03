@@ -6,8 +6,7 @@ const UserModel = require('../models/UserModel');
 class UserService {
     async registrarUsuario(datos) {
         const hash = await bcrypt.hash(datos.password, 10);
-        const result = await UserModel.crearUsuario({ ...datos, password: hash });
-        return result.rows[0];
+        return await UserModel.crearUsuario({ ...datos, password: hash });
     }
 
     async autenticarUsuario(username, password) {

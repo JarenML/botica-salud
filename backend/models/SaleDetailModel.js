@@ -1,61 +1,41 @@
-const db = require('../config/db');
-
+const prisma = require('../config/prisma');
 
 class SaleDetailModel {
     async crearDetalleVenta(datos) {
-        const query = `
-        INSERT INTO detalle_venta (
-            venta_id, producto_id, cantidad, precio_unitario, subtotal
-        )
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING *`;
-        const valores = [
-            datos.venta_id,
-            datos.producto_id,
-            datos.cantidad,
-            datos.precio_unitario,
-            datos.subtotal
-        ];
-        const result = await db.query(query, valores);
-        return result.rows[0];
+        return prisma.detalle_venta.create({
+            data: {
+                venta_id: Number(datos.venta_id),
+                producto_id: Number(datos.producto_id),
+                cantidad: Number(datos.cantidad),
+                precio_unitario: datos.precio_unitario,
+                subtotal: datos.subtotal,
+            }
+        });
     }
 
-
     async listarDetalleVentas() {
-        const query = `SELECT * FROM detalle_venta`;
-        const result = await db.query(query);
-        return result.rows;
+        return prisma.detalle_venta.findMany();
     }
 
     async obtenerDetalleVentaPorId(id) {
-        const query = `SELECT * FROM detalle_venta WHERE id_detalle = $1`;
-        const result = await db.query(query, [id]);
-        return result.rows[0];
+        return prisma.detalle_venta.findUnique({ where: { id_detalle: Number(id) } });
     }
 
     async actualizarDetalleVenta(id, datos) {
-        const query = `
-        UPDATE detalle_venta
-        SET venta_id = $1, producto_id = $2, cantidad = $3, 
-            precio_unitario = $4, subtotal = $5
-        WHERE id_detalle = $6
-        RETURNING *`;
-        const valores = [
-            datos.venta_id,
-            datos.producto_id,
-            datos.cantidad,
-            datos.precio_unitario,
-            datos.subtotal,
-            id
-        ];
-        const result = await db.query(query, valores);
-        return result.rows[0];
+        return prisma.detalle_venta.update({
+            where: { id_detalle: Number(id) },
+            data: {
+                venta_id: Number(datos.venta_id),
+                producto_id: Number(datos.producto_id),
+                cantidad: Number(datos.cantidad),
+                precio_unitario: datos.precio_unitario,
+                subtotal: datos.subtotal,
+            }
+        });
     }
 
     async eliminarDetalleVenta(id) {
-        const query = `DELETE FROM detalle_venta WHERE id_detalle = $1 RETURNING *`;
-        const result = await db.query(query, [id]);
-        return result.rows[0];
+        return prisma.detalle_venta.delete({ where: { id_detalle: Number(id) } });
     }
 }
 

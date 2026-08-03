@@ -1,55 +1,42 @@
-const db = require('../config/db');
+const prisma = require('../config/prisma');
 
 class SupplierModel {
 
     async crearProveedor(datos) {
-        const query = `
-        INSERT INTO Proveedor (nombre, telefono, email, direccion, ruc)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING *`;
-        const result = await db.query(query, [
-            datos.nombre,
-            datos.telefono,
-            datos.email,
-            datos.direccion,
-            datos.ruc
-        ]);
-        return result.rows[0]; 
+        return prisma.proveedor.create({
+            data: {
+                nombre: datos.nombre,
+                telefono: datos.telefono,
+                email: datos.email,
+                direccion: datos.direccion,
+                ruc: datos.ruc,
+            }
+        });
     }
 
     async listarProveedores() {
-        const query = `SELECT * FROM Proveedor`;
-        const result = await db.query(query);
-        return result.rows; 
+        return prisma.proveedor.findMany();
     }
 
     async obtenerProveedorPorId(id) {
-        const query = `SELECT * FROM Proveedor WHERE id_proveedor = $1`;
-        const result = await db.query(query, [id]);
-        return result.rows[0]; 
+        return prisma.proveedor.findUnique({ where: { id_proveedor: Number(id) } });
     }
 
     async actualizarProveedor(id, datos) {
-        const query = `
-        UPDATE Proveedor
-        SET nombre = $1, telefono = $2, email = $3, direccion = $4, ruc = $5
-        WHERE id_proveedor = $6
-        RETURNING *`;
-        const result = await db.query(query, [
-            datos.nombre,
-            datos.telefono,
-            datos.email,
-            datos.direccion,
-            datos.ruc,
-            id
-        ]);
-        return result.rows[0]; 
+        return prisma.proveedor.update({
+            where: { id_proveedor: Number(id) },
+            data: {
+                nombre: datos.nombre,
+                telefono: datos.telefono,
+                email: datos.email,
+                direccion: datos.direccion,
+                ruc: datos.ruc,
+            }
+        });
     }
 
     async eliminarProveedor(id) {
-        const query = `DELETE FROM Proveedor WHERE id_proveedor = $1 RETURNING *`;
-        const result = await db.query(query, [id]);
-        return result.rows[0]; 
+        return prisma.proveedor.delete({ where: { id_proveedor: Number(id) } });
     }
 }
 

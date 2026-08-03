@@ -1,42 +1,36 @@
-const db = require('../config/db');
+const prisma = require('../config/prisma');
 
 class CategoryModel {
 
     async crearCategoria(datos) {
-        const query = `
-        INSERT INTO Categoria (nombre, descripcion)
-        VALUES ($1, $2)
-        RETURNING *`;
-        const result = await db.query(query, [datos.nombre, datos.descripcion]);
-        return result.rows[0]; 
+        return prisma.categoria.create({
+            data: {
+                nombre: datos.nombre,
+                descripcion: datos.descripcion,
+            }
+        });
     }
 
     async listarCategorias() {
-        const query = `SELECT * FROM Categoria`;
-        const result = await db.query(query);
-        return result.rows; 
+        return prisma.categoria.findMany();
     }
 
     async obtenerCategoriaPorId(id) {
-        const query = `SELECT * FROM Categoria WHERE id_categoria = $1`;
-        const result = await db.query(query, [id]);
-        return result.rows[0]; 
+        return prisma.categoria.findUnique({ where: { id_categoria: Number(id) } });
     }
 
     async actualizarCategoria(id, datos) {
-        const query = `
-        UPDATE Categoria
-        SET nombre = $1, descripcion = $2
-        WHERE id_categoria = $3
-        RETURNING *`;
-        const result = await db.query(query, [datos.nombre, datos.descripcion, id]);
-        return result.rows[0]; 
+        return prisma.categoria.update({
+            where: { id_categoria: Number(id) },
+            data: {
+                nombre: datos.nombre,
+                descripcion: datos.descripcion,
+            }
+        });
     }
 
     async eliminarCategoria(id) {
-        const query = `DELETE FROM Categoria WHERE id_categoria = $1 RETURNING *`;
-        const result = await db.query(query, [id]);
-        return result.rows[0]; 
+        return prisma.categoria.delete({ where: { id_categoria: Number(id) } });
     }
 }
 

@@ -1,7 +1,9 @@
 // backend/Server.js
 const express = require('express');
 const cors = require('cors');
-const userRouter = require('./routes/UserRouter'); 
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
+const userRouter = require('./routes/UserRouter');
 const productRouter = require('./routes/ProductRouter'); 
 const categoryRouter = require('./routes/CategoryRouter');
 const supplierRouter = require('./routes/SupplierRouter');
@@ -22,6 +24,7 @@ class Server {
     }
 
     routes() {
+        this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
         this.app.use('/api/usuarios', userRouter);
         this.app.use('/api/productos', productRouter); 
         this.app.use('/api/categorias', categoryRouter);

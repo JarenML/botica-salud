@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const ProductController = require('../controllers/ProductController');
 const upload = require('../middlewares/upload');
+const verificarToken = require('../middlewares/authMiddleware');
+
+router.use(verificarToken);
 
 /**
  * @openapi

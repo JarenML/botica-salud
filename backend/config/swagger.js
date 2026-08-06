@@ -15,7 +15,15 @@ const options = {
                 description: 'Servidor local',
             },
         ],
+        security: [{ bearerAuth: [] }],
         components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                },
+            },
             parameters: {
                 IdParam: {
                     name: 'id',

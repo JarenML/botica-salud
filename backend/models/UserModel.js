@@ -21,6 +21,10 @@ class UserModel {
         return prisma.usuario.findUnique({ where: { username } });
     }
 
+    async buscarPorEmailOUsername(email, username) {
+        return prisma.usuario.findFirst({ where: { OR: [{ email }, { username }] } });
+    }
+
     async listarUsuarios() {
         return prisma.usuario.findMany();
     }

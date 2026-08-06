@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const SupplierController = require('../controllers/SupplierController');
+const verificarToken = require('../middlewares/authMiddleware');
+
+router.use(verificarToken);
 
 /**
  * @openapi

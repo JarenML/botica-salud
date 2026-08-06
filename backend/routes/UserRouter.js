@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const UserController = require('../controllers/UserController');
+const verificarToken = require('../middlewares/authMiddleware');
 
 /**
  * @openapi
@@ -17,6 +18,7 @@ const UserController = require('../controllers/UserController');
  *   post:
  *     summary: Registrar un nuevo usuario
  *     tags: [Usuarios]
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -32,6 +34,8 @@ const UserController = require('../controllers/UserController');
  *               $ref: '#/components/schemas/Usuario'
  *       400:
  *         description: Error al registrar usuario
+ *       409:
+ *         description: El email o username ya esta en uso
  */
 router.post('/registro', UserController.registrar);
 
@@ -41,6 +45,7 @@ router.post('/registro', UserController.registrar);
  *   post:
  *     summary: Autenticar un usuario
  *     tags: [Usuarios]
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -59,7 +64,12 @@ router.post('/registro', UserController.registrar);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Usuario'
+ *               allOf:
+ *                 - $ref: '#/components/schemas/Usuario'
+ *                 - type: object
+ *                   properties:
+ *                     token:
+ *                       type: string
  *       401:
  *         description: Usuario o contrasena incorrectos
  */
@@ -71,6 +81,8 @@ router.post('/login', UserController.login);
  *   get:
  *     summary: Listar todos los usuarios
  *     tags: [Usuarios]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de usuarios
@@ -80,7 +92,9 @@ router.post('/login', UserController.login);
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Usuario'
+ *       401:
+ *         description: No autenticado
  */
-router.get('/', UserController.obtenerTodosLosUsuarios);
+router.get('/', verificarToken, UserController.obtenerTodosLosUsuarios);
 
 module.exports = router;

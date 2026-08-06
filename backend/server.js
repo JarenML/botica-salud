@@ -1,4 +1,4 @@
-// backend/Server.js
+// backend/server.js
 const express = require('express');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');

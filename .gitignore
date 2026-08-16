@@ -32,7 +32,6 @@ lerna-debug.log*
 *.local
 
 # === PRIVADO ===
-AGENTS.md
 notes/
 
 .claude

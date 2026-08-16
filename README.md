@@ -2,20 +2,20 @@
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/JarenML/botica-salud)
 
-## Desarrollo con Docker
+## Development with Docker
 
-Requiere Docker y Docker Compose. Antes de levantar los contenedores, asegurate de tener `backend/.env` y `frontend/.env` (copialos desde sus `.env.example` si no existen).
+Requires Docker and Docker Compose. Before starting the containers, make sure `backend/.env` and `frontend/.env` exist (copy them from their `.env.example` files if they don't).
 
 ```bash
 docker compose -f docker-compose-dev.yml up -d
 ```
 
-- Backend: http://localhost:3000 (docs en `/api-docs`)
+- Backend: http://localhost:3000 (docs at `/api-docs`)
 - Frontend: http://localhost:5173
 - Postgres: localhost:5432
 
-El backend aplica las migraciones de Prisma automaticamente al iniciar. El codigo de `backend/` y `frontend/` esta montado como volumen, asi que los cambios se reflejan con hot reload sin reconstruir la imagen. Si agregas una dependencia nueva (`npm install`), reconstruye con `docker compose -f docker-compose-dev.yml build`.
+The backend applies Prisma migrations automatically on startup. The `backend/` and `frontend/` code is mounted as a volume, so changes are reflected via hot reload without rebuilding the image. If you add a new dependency (`npm install`), rebuild with `docker compose -f docker-compose-dev.yml build`.
 
-Para detener todo: `docker compose -f docker-compose-dev.yml down` (agrega `-v` para borrar tambien los datos de Postgres).
+To stop everything: `docker compose -f docker-compose-dev.yml down` (add `-v` to also delete Postgres data).
 
-Tip: para no repetir `-f docker-compose-dev.yml` en cada comando, exporta `export COMPOSE_FILE=docker-compose-dev.yml` en tu shell.
+Tip: to avoid repeating `-f docker-compose-dev.yml` on every command, export `export COMPOSE_FILE=docker-compose-dev.yml` in your shell.

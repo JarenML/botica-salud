@@ -1,9 +1,7 @@
 // src/components/Home.jsx
 import {
-    FaCashRegister, FaBoxes, FaUsers, FaChartBar, FaClipboardList, FaWarehouse,
     FaExclamationTriangle, FaMoneyBillWave, FaUserFriends, FaBoxOpen
 } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import clientService from '../services/client.service';
 import productService from '../services/product.service';
@@ -11,7 +9,6 @@ import saleService from '../services/sale.service';
 import '../styles/home.css';
 
 const Home = () => {
-    const navigate = useNavigate();
     const [totalClientes, setTotalClientes] = useState(0);
     const [totalProductos, setTotalProductos] = useState(0);
     const [ventasHoy, setVentasHoy] = useState({ total: 0, cantidad: 0 });
@@ -89,40 +86,6 @@ const Home = () => {
                         </ul>
                     </div>
                 </section>
-
-                {/* Grid de tarjetas principales */}
-                <div className="cards-container">
-                    <div className="card" onClick={() => navigate('/registro_venta')}>
-                        <FaCashRegister className="card-icon venta-icon" />
-                        <h3>Nueva Venta</h3>
-                        <p>Registrar nueva transacción</p>
-                    </div>
-                    <div className="card" onClick={() => navigate('/inventario')}>
-                        <FaBoxes className="card-icon inventario-icon" />
-                        <h3>Gestión de Inventario</h3>
-                        <p>Administrar productos</p>
-                    </div>
-                    <div className="card" onClick={() => navigate('/clientes')}>
-                        <FaUsers className="card-icon clientes-icon" />
-                        <h3>Registro de Clientes</h3>
-                        <p>Gestionar clientes</p>
-                    </div>
-                    <div className="card" onClick={() => navigate('/categorias')}>
-                        <FaChartBar className="card-icon categorias-icon" />
-                        <h3>Categorias</h3>
-                        <p>Ver todas las Categoria</p>
-                    </div>
-                    <div className="card" onClick={() => navigate('/ventas')}>
-                        <FaClipboardList className="card-icon reportes-icon" />
-                        <h3>Ventas</h3>
-                        <p>Información de Ventas</p>
-                    </div>
-                    <div className="card" onClick={() => navigate('/proveedores')}>
-                        <FaWarehouse className="card-icon proveedores-icon" />
-                        <h3>Proveedores</h3>
-                        <p>Lista de proveedores</p>
-                    </div>
-                </div>
             </main>
         </div>
     );

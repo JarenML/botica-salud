@@ -1,144 +1,142 @@
-/* CABECERA FIJA QUE NO SE MUEVE */
+/* CABECERA FIJA — diseño corporativo, minimalista y moderno */
 .home-header {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    --hdr-bg: #0d1321;
+    --hdr-bg-soft: #121a2b;
+    --hdr-border: rgba(255, 255, 255, 0.08);
+    --hdr-text: #cbd5e1;
+    --hdr-text-strong: #f8fafc;
+    --hdr-muted: #6b7690;
+    --hdr-accent: #4f8cff;
+    --hdr-accent-soft: rgba(79, 140, 255, 0.14);
+
+    display: flex;
     align-items: center;
-    padding: 1rem 3rem;
-    background-color: #1a1a2e;
-    border-bottom: 1px solid #2d2d42;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+    justify-content: space-between;
+    padding: 0.85rem 2rem;
+    min-height: 68px;
+    background-color: var(--hdr-bg);
+    border-bottom: 1px solid var(--hdr-border);
     position: sticky;
     top: 0;
     z-index: 1000;
-    gap: 2rem;
-    flex-shrink: 0; /* Evita que se encoja */
+    gap: 1.5rem;
 }
 
-.header-nav {
-    min-width: 0;
+/* ---------- Marca ---------- */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex-shrink: 0;
+}
+
+.brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--hdr-accent), #2f5fce);
+    color: #fff;
+    font-size: 1rem;
+    flex-shrink: 0;
 }
 
 .header-left h1 {
     margin: 0;
-    font-size: 1.8rem;
-    color: #4cc9f0;
+    font-size: 1.15rem;
+    color: var(--hdr-text-strong);
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.2px;
     white-space: nowrap;
+}
+
+/* ---------- Navegación ---------- */
+.header-nav {
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .header-nav ul {
     display: flex;
     list-style: none;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 0.15rem;
     margin: 0;
     padding: 0;
 }
 
-.header-nav a {
-    text-decoration: none;
-    color: #e2e2e2;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    padding: 0.5rem 0;
-    position: relative;
-    font-size: 1rem;
-    white-space: nowrap;
-}
-
-.header-nav a:hover {
-    color: #4cc9f0;
-}
-
-.header-nav a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: #4cc9f0;
-    transition: width 0.3s ease;
-}
-
-.header-nav a:hover::after {
-    width: 100%;
-}
-
-.header-right {
+.nav-link {
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    gap: 0.45rem;
+    text-decoration: none;
+    color: var(--hdr-text);
+    font-weight: 500;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    padding: 0.55rem 0.75rem;
+    border-radius: 8px;
+    transition: color 0.2s ease, background-color 0.2s ease;
 }
 
-.header-right p {
-    margin: 0;
+.nav-icon {
     font-size: 0.95rem;
-    color: #b2b2b2;
-    font-weight: 400;
-    background-color: #16213e;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    border: 1px solid #2d2d42;
+    color: var(--hdr-muted);
+    transition: color 0.2s ease;
 }
 
-/*responsive*/
-@media (max-width: 900px) {
-    .home-header {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
-        gap: 1rem;
-        padding: 1.2rem;
-    }
-    
-    .header-nav ul {
-        flex-wrap: wrap;
-        gap: 1rem;
-    }
-    
-    .header-right {
-        justify-content: center;
-    }
+.nav-link:hover {
+    color: var(--hdr-text-strong);
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
-@media (max-width: 480px) {
-    .home-header {
-        padding: 1rem;
-    }
-    
-    .header-nav a {
-        font-size: 0.9rem;
-    }
-    
-    .home-content {
-        padding: 1rem;
-    }
+.nav-link:hover .nav-icon {
+    color: var(--hdr-text-strong);
 }
-/* Estilos para la sección de usuario */
+
+.nav-link.active {
+    color: var(--hdr-text-strong);
+    background-color: var(--hdr-accent-soft);
+}
+
+.nav-link.active .nav-icon {
+    color: var(--hdr-accent);
+}
+
+/* ---------- Usuario ---------- */
 .header-right {
     display: flex;
     align-items: center;
-    margin-left: auto; /* Empuja el contenido a la derecha */
+    justify-content: flex-end;
+    flex-shrink: 0;
 }
 
 .user-display {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 0.8rem;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    transition: all 0.3s ease;
+    gap: 0.7rem;
+    cursor: pointer;
+    background: var(--hdr-bg-soft);
+    border: 1px solid var(--hdr-border);
+    padding: 0.4rem 0.9rem 0.4rem 0.5rem;
+    border-radius: 999px;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .user-display:hover {
-    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.18);
+    background-color: #16203a;
 }
 
 .user-icon {
-    font-size: 1.5rem;
-    color: var(--primary);
+    font-size: 1.6rem;
+    color: var(--hdr-accent);
+    flex-shrink: 0;
 }
 
 .user-info {
@@ -149,48 +147,108 @@
 
 .user-name {
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    color: var(--hdr-text-strong);
 }
 
 .user-role {
-    font-size: 0.8rem;
-    color: var(--primary-light);
+    font-size: 0.72rem;
+    color: var(--hdr-muted);
     text-transform: capitalize;
-}
-
-.user-display {
-    position: relative;
-    cursor: pointer;
 }
 
 .user-menu {
     position: absolute;
-    top: 60px;
+    top: calc(100% + 8px);
     right: 0;
-    background-color: #1a1a2e; 
-    border: 1px solid #2d2d42;
-    padding: 10px 16px;
-    border-radius: 6px;
+    background-color: var(--hdr-bg-soft);
+    border: 1px solid var(--hdr-border);
+    padding: 6px;
+    border-radius: 10px;
     z-index: 100;
-    min-width: 160px; 
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    white-space: nowrap;
+    min-width: 170px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
 .user-menu button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     background: none;
     border: none;
-    font-size: 14px;
+    font-size: 0.85rem;
     cursor: pointer;
-    color: #e2e2e2;
+    color: var(--hdr-text);
     width: 100%;
     text-align: left;
-    padding: 6px 0;
+    padding: 0.55rem 0.6rem;
+    border-radius: 6px;
     transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .user-menu button:hover {
-    color: #4cc9f0;
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
+    color: var(--hdr-text-strong);
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* ---------- Responsive ---------- */
+/* Espacio limitado: la barra conserva una sola fila y los enlaces
+   pasan a modo icono para que las 7 opciones sigan cabiendo todas. */
+@media (max-width: 1180px) {
+    .home-header {
+        gap: 1rem;
+        padding: 0.85rem 1.5rem;
+    }
+
+    .header-nav ul {
+        justify-content: space-between;
+        gap: 0.1rem;
+    }
+
+    .nav-link {
+        padding: 0.6rem;
+    }
+
+    .nav-link span {
+        display: none;
+    }
+
+    .nav-icon {
+        font-size: 1.05rem;
+    }
+}
+
+/* Pantallas muy angostas: la barra pasa a varias filas, centradas. */
+@media (max-width: 640px) {
+    .home-header {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    .header-left {
+        flex-basis: 100%;
+        justify-content: center;
+    }
+
+    .header-nav {
+        order: 3;
+        flex: 0 1 auto;
+    }
+
+    .header-nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.4rem;
+    }
+
+    .header-right {
+        order: 2;
+    }
+}
+
+@media (max-width: 420px) {
+    .home-content {
+        padding: 1rem;
+    }
 }

@@ -1,6 +1,1 @@
-/* Reset completo para ocupar toda la ventana */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@import "tailwindcss";

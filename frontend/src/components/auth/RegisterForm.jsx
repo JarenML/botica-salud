@@ -75,6 +75,7 @@ const RegisterForm = () => {
                         <button type="submit">Registrarse</button>
                         
                         {mensaje && <p className={mensaje.includes('exitosamente') ? 'success' : 'error'}>{mensaje}</p>}
+                        <p className="redirect">¿Ya tienes una cuenta? <a href="/">Inicia sesión</a></p>
                     </form>
                 </div>
             </div>

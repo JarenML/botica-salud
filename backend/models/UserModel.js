@@ -1,35 +1,32 @@
 // backend/models/UserModel.js
 
-const Database = require('../config/db');
+const prisma = require('../config/prisma');
 
 class UserModel {
     async crearUsuario(datos) {
-        const query = `
-        INSERT INTO Usuario(nombre, apellidos, email, username, password, rol)
-        VALUES($1, $2, $3, $4, $5, $6)
-        RETURNING id_usuario, username, rol`;
-        return Database.query(query, [
-            datos.nombre,
-            datos.apellidos,
-            datos.email,
-            datos.username,
-            datos.password,
-            datos.rol
-        ]);
+        return prisma.usuario.create({
+            data: {
+                nombre: datos.nombre,
+                apellidos: datos.apellidos,
+                email: datos.email,
+                username: datos.username,
+                password: datos.password,
+                rol: datos.rol,
+            },
+            select: { id_usuario: true, username: true, rol: true }
+        });
     }
 
     async buscarPorUsername(username) {
-        const result = await Database.query(
-            'SELECT * FROM Usuario WHERE username = $1',
-            [username]
-        );
-        return result.rows[0];
+        return prisma.usuario.findUnique({ where: { username } });
+    }
+
+    async buscarPorEmailOUsername(email, username) {
+        return prisma.usuario.findFirst({ where: { OR: [{ email }, { username }] } });
     }
 
     async listarUsuarios() {
-        const query = `SELECT * FROM Usuario`;
-        const result = await Database.query(query);
-        return result.rows; 
+        return prisma.usuario.findMany();
     }
 }
 

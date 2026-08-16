@@ -1,6 +1,5 @@
 # === BACKEND ===
 backend/node_modules/
-backend/package-lock.json
 backend/.env
 
 # === FRONTEND ===
@@ -31,3 +30,9 @@ lerna-debug.log*
 
 # === GENERALES ===
 *.local
+
+# === PRIVADO ===
+AGENTS.md
+notes/
+
+.claude

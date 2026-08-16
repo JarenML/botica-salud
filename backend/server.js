@@ -25,6 +25,9 @@ class Server {
 
     routes() {
         this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+        this.app.get('/api/test', (req, res) => {
+            res.json({ message: 'pong !!', timestamp: new Date().toISOString() });
+        });
         this.app.use('/api/usuarios', userRouter);
         this.app.use('/api/productos', productRouter); 
         this.app.use('/api/categorias', categoryRouter);

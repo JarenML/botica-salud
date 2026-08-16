@@ -33,3 +33,6 @@ lerna-debug.log*
 
 # === PRIVADO ===
 AGENTS.md
+notes/
+
+.claude

@@ -23,7 +23,7 @@ const Header = () => {
     return (
         <header className="home-header">
             <div className="header-left">
-                <h1>Botica Nova Salud</h1>
+                <h1>Botica Nova Salud!</h1>
             </div>
             <nav className="header-nav">
                 <ul>

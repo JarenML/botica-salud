@@ -17,6 +17,7 @@ const LoginForm = () => {
         e.preventDefault();
         try {
             const res = await api.post('/usuarios/login', data);
+            localStorage.setItem('token', res.data.token);
             localStorage.setItem('usuario', JSON.stringify({
                 nombre: res.data.nombre || res.data.username,
                 rol: res.data.rol

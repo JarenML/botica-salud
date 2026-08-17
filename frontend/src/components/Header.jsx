@@ -29,6 +29,7 @@ const Header = () => {
     const toggleMenu = () => setShowMenu(!showMenu);
 
     const handleLogout = () => {
+        localStorage.removeItem('token');
         localStorage.removeItem('usuario');
         navigate('/');
     };

@@ -1,9 +1,10 @@
 // src/components/auth/RegisterForm.jsx
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import registerBg from '../../assets/register2-bg.jpg';
-import { FaUser, FaLock, FaEnvelope, FaIdCard, FaEye, FaEyeSlash, FaUserTie, FaChevronDown, FaCheck, FaCapsules } from 'react-icons/fa';
+import Select from '../ui/Select';
+import { FaUser, FaLock, FaEnvelope, FaIdCard, FaEye, FaEyeSlash, FaUserTie, FaCapsules } from 'react-icons/fa';
 
 const fieldClass =
     'w-full rounded-lg border border-white/10 bg-white/5 py-2.5 pr-3 pl-10 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-brand-primary focus:bg-white/7 focus:ring-1 focus:ring-brand-primary';
@@ -13,55 +14,6 @@ const ROLES = [
     { value: 'admin', label: 'Administrador' },
     { value: 'cajero', label: 'Cajero' },
 ];
-
-const RoleSelect = ({ value, onChange }) => {
-    const [open, setOpen] = useState(false);
-    const ref = useRef(null);
-    const selected = ROLES.find((r) => r.value === value);
-
-    useEffect(() => {
-        const onClickOutside = (e) => {
-            if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-        };
-        document.addEventListener('mousedown', onClickOutside);
-        return () => document.removeEventListener('mousedown', onClickOutside);
-    }, []);
-
-    return (
-        <div className="relative" ref={ref}>
-            <FaUserTie className="absolute top-1/2 left-3 -translate-y-1/2 text-sm text-slate-500" />
-            <button
-                type="button"
-                onClick={() => setOpen(!open)}
-                className={`${fieldClass} flex items-center justify-between text-left`}
-            >
-                <span>{selected?.label}</span>
-                <FaChevronDown className={`text-xs text-slate-500 transition-transform ${open ? 'rotate-180' : ''}`} />
-            </button>
-
-            {open && (
-                <ul className="absolute z-10 mt-1.5 w-full overflow-hidden rounded-lg border border-white/10 bg-[#121a2b] py-1 shadow-xl shadow-black/40">
-                    {ROLES.map((rol) => (
-                        <li key={rol.value}>
-                            <button
-                                type="button"
-                                onClick={() => { onChange(rol.value); setOpen(false); }}
-                                className={`flex w-full items-center justify-between px-3.5 py-2 text-left text-sm transition ${
-                                    rol.value === value
-                                        ? 'bg-brand-primary/15 text-brand-secondary'
-                                        : 'text-slate-300 hover:bg-white/5 hover:text-white'
-                                }`}
-                            >
-                                {rol.label}
-                                {rol.value === value && <FaCheck className="text-xs" />}
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </div>
-    );
-};
 
 const RegisterForm = () => {
     const [datos, setDatos] = useState({
@@ -153,7 +105,12 @@ const RegisterForm = () => {
 
                         <div>
                             <label className="mb-1.5 block text-xs font-medium text-slate-400">Rol</label>
-                            <RoleSelect value={datos.rol} onChange={(rol) => setDatos({ ...datos, rol })} />
+                            <Select
+                                icon={FaUserTie}
+                                value={datos.rol}
+                                onChange={(rol) => setDatos({ ...datos, rol })}
+                                options={ROLES}
+                            />
                         </div>
 
                         {mensaje && (

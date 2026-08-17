@@ -1,12 +1,11 @@
 // src/components/Home.jsx
 import {
-    FaExclamationTriangle, FaMoneyBillWave, FaUserFriends, FaBoxOpen
+    FaExclamationTriangle, FaMoneyBillWave, FaUserFriends, FaBoxOpen, FaCheckCircle
 } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import clientService from '../services/client.service';
 import productService from '../services/product.service';
 import saleService from '../services/sale.service';
-import '../styles/home.css';
 
 const Home = () => {
     const [totalClientes, setTotalClientes] = useState(0);
@@ -41,7 +40,7 @@ const Home = () => {
                 const productosConStockBajo = products.data.filter(
                     (producto) => producto.stock_actual <= producto.stock_minimo
                 );
-                setStockBajo(productosConStockBajo); 
+                setStockBajo(productosConStockBajo);
             } catch (error) {
                 console.error('Error al obtener datos para el Home:', error);
             }
@@ -49,43 +48,81 @@ const Home = () => {
         fetchData();
     }, []);
 
-
     return (
-        <div className="home-page">
-            <main className="home-content">
-                <section className="top-info-line">
-                    <div className="info-box stock">
-                        <h4><FaExclamationTriangle className="info-icon stock-icon" /> Stock Bajo</h4>
-                        <ul>
-                            {stockBajo.length > 0 ? (
-                                stockBajo.map((producto) => (
-                                    <li key={producto.codigo}>{producto.nombre}: {producto.stock_actual} unidades</li>
-                                ))
-                            ) : (
-                                <li>Todos los productos están en buen stock</li>
-                            )}
-                        </ul>
+        <div className="min-h-screen bg-brand-ink">
+            <main className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
+                <div className="mb-8">
+                    <h1 className="text-2xl font-semibold text-white">Resumen</h1>
+                    <p className="mt-1 text-sm text-slate-400">Estado general de la farmacia hoy.</p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-5 transition hover:border-white/20">
+                        <div className="flex items-center gap-3">
+                            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-500/10 text-red-400">
+                                <FaExclamationTriangle />
+                            </span>
+                            <div>
+                                <p className="text-xs font-medium text-slate-400">Stock Bajo</p>
+                                <p className="text-xl font-semibold text-white">{stockBajo.length}</p>
+                            </div>
+                        </div>
+
+                        {stockBajo.length > 0 ? (
+                            <ul className="mt-4 max-h-32 space-y-1.5 overflow-y-auto pr-1 text-sm">
+                                {stockBajo.map((producto) => (
+                                    <li key={producto.codigo} className="flex justify-between gap-2 text-slate-300">
+                                        <span className="truncate">{producto.nombre}</span>
+                                        <span className="shrink-0 text-red-400">{producto.stock_actual} u.</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="mt-4 flex items-center gap-1.5 text-sm text-slate-400">
+                                <FaCheckCircle className="text-emerald-400" /> Todo en buen stock
+                            </p>
+                        )}
                     </div>
-                    <div className="info-box ventas">
-                        <h4><FaMoneyBillWave className="info-icon ventas-icon" /> Ventas Hoy</h4>
-                        <ul>
-                            <li>Total: ${ventasHoy.total.toFixed(2)}</li>
-                            <li>Cantidad: {ventasHoy.cantidad}</li>
-                        </ul>
+
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-5 transition hover:border-white/20">
+                        <div className="flex items-center gap-3">
+                            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+                                <FaMoneyBillWave />
+                            </span>
+                            <div>
+                                <p className="text-xs font-medium text-slate-400">Ventas Hoy</p>
+                                <p className="text-xl font-semibold text-white">${ventasHoy.total.toFixed(2)}</p>
+                            </div>
+                        </div>
+                        <p className="mt-4 text-sm text-slate-400">{ventasHoy.cantidad} venta{ventasHoy.cantidad === 1 ? '' : 's'} pagada{ventasHoy.cantidad === 1 ? '' : 's'}</p>
                     </div>
-                    <div className="info-box clientes">
-                        <h4><FaUserFriends className="info-icon clientes-icon" /> Total Clientes</h4>
-                        <ul>
-                            <li>Registrados: {totalClientes}</li>
-                        </ul>
+
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-5 transition hover:border-white/20">
+                        <div className="flex items-center gap-3">
+                            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400">
+                                <FaUserFriends />
+                            </span>
+                            <div>
+                                <p className="text-xs font-medium text-slate-400">Total Clientes</p>
+                                <p className="text-xl font-semibold text-white">{totalClientes}</p>
+                            </div>
+                        </div>
+                        <p className="mt-4 text-sm text-slate-400">Registrados en el sistema</p>
                     </div>
-                    <div className="info-box inventario">
-                        <h4><FaBoxOpen className="info-icon inventario-icon" /> Total Productos</h4>
-                        <ul>
-                            <li>Productos: {totalProductos}</li>
-                        </ul>
+
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-5 transition hover:border-white/20">
+                        <div className="flex items-center gap-3">
+                            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-500/10 text-violet-400">
+                                <FaBoxOpen />
+                            </span>
+                            <div>
+                                <p className="text-xs font-medium text-slate-400">Total Productos</p>
+                                <p className="text-xl font-semibold text-white">{totalProductos}</p>
+                            </div>
+                        </div>
+                        <p className="mt-4 text-sm text-slate-400">En inventario</p>
                     </div>
-                </section>
+                </div>
             </main>
         </div>
     );

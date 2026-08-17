@@ -7,13 +7,13 @@ Short rule: a screen is migrated to Tailwind only when it's touched for a real r
 | CSS file | Component/Page | Status |
 |---|---|---|
 | `header.css` | Header | Pending |
-| `home.css` | Home | Pending |
+| ~~`home.css`~~ | Home | **Done** — `Home.jsx` is now pure Tailwind; `home.css` deleted |
 | ~~`auth.css`~~ | Login / Register | **Done** — both forms are pure Tailwind; `auth.css` deleted |
-| `inventario.css` | Inventory | Pending |
+| ~~`inventario.css`~~ | Inventory | **Done** — `Inventario.jsx` is now pure Tailwind; `inventario.css` deleted. Introduced the shared `components/ui/Select.jsx` dropdown, also adopted by Register |
 | `category.css` | Categories | Pending |
 | `client.css` | Clients | Pending (`.hidden` rule isolated in `@layer components`) |
 | `supplier.css` | Suppliers | Pending |
 | `sale.css` | Sales | Pending |
-| `register_sale.css` | Register Sale | Pending |
+| `register_sale.css` | Register Sale | Pending (bare `h2 { color }` rule scoped to `.registrar-venta-container h2` inside `@layer components` — it was leaking onto every `<h2>` app-wide) |
 
 **New:** any new UI (AI Assistant, MCP, etc.) is built directly in Tailwind, without going through this table.

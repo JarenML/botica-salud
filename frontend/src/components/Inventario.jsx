@@ -1,17 +1,20 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import '../styles/inventario.css';
 import productService from '../services/product.service';
 import categoryService from '../services/category.service';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import NovaSalud from '../assets/NovaLogo.png'; 
-import { FaFilePdf } from 'react-icons/fa';
+import NovaSalud from '../assets/NovaLogo.png';
+import Select from './ui/Select';
+import { FaFilePdf, FaPlus, FaSearch, FaPen, FaTrash, FaSpinner, FaTag } from 'react-icons/fa';
+
+const fieldClass =
+    'w-full rounded-lg border border-white/10 bg-white/5 px-3.5 py-2.5 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-brand-primary focus:bg-white/7 focus:ring-1 focus:ring-brand-primary';
 
 const Inventario = () => {
     const [products, setProducts] = useState([]);
     const [categorias, setCategorias] = useState([]);
     const [filtroNombre, setFiltroNombre] = useState('');
-    const [filtroCategoria, setFiltroCategoria] = useState('');
+    const [filtroCategoria, setFiltroCategoria] = useState('todos');
     const [modalVisible, setModalVisible] = useState(false);
     const [popupConfirmVisible, setPopupConfirmVisible] = useState(false);
     const [productoAEliminar, setProductoAEliminar] = useState(null);
@@ -158,7 +161,7 @@ const Inventario = () => {
 
         const logo = NovaSalud;
 
-        doc.addImage(logo, 'PNG', 1, -10, 70, 70); 
+        doc.addImage(logo, 'PNG', 1, -10, 70, 70);
 
         doc.setFontSize(16);
         doc.setFont("helvetica", "bold");
@@ -203,100 +206,166 @@ const Inventario = () => {
         doc.save('inventario_botica_nova_salud.pdf');
     };
 
+    const categoriaOptions = [
+        { value: 'todos', label: 'Todas las categorías' },
+        ...categorias.map((cat) => ({ value: String(cat.id_categoria), label: cat.nombre })),
+    ];
+
     return (
-        <div className="inventory-page-unique">
-        {popupConfirmVisible && (
-            <div className="modal-overlay-unique">
-                <div className="modal-unique">
-                    <h3>¿Estás seguro de eliminar este producto?</h3>
-                    <p>Esta acción no se puede deshacer.</p>
-                    <div className="modal-actions-unique">
-                        <button className="delete-button-unique" onClick={confirmarEliminacion}>Sí, eliminar</button>
-                        <button className="cancel-button-unique" onClick={() => setPopupConfirmVisible(false)}>Cancelar</button>
+        <div className="min-h-screen bg-brand-ink">
+            <main className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
+                <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h1 className="text-2xl font-semibold text-white">Inventario</h1>
+                        <p className="mt-1 text-sm text-slate-400">Administra los productos de la farmacia.</p>
                     </div>
-                </div>
-            </div>
-        )}
-            <main className="inventory-content-unique">
-                {modalVisible && (
-                    <div className="modal-overlay-unique">
-                        <div className="modal-unique">
-                            <h2>{modoEdicion ? 'Editar producto' : 'Registrar nuevo producto'}</h2>
-                            <div className="modal-form-unique">
-                                <input name="codigo" placeholder="Código" value={nuevoProducto.codigo} onChange={handleChangeModal} />
-                                <input name="nombre" placeholder="Nombre" value={nuevoProducto.nombre} onChange={handleChangeModal} />
-                                <input name="imagen" type="file" accept="image/*" onChange={(e) => handleImagenUpload(e)} />
-                                <input name="descripcion" placeholder="Descripción" value={nuevoProducto.descripcion} onChange={handleChangeModal} />
-                                <input type="number" name="precio_venta" placeholder="Precio de venta" value={nuevoProducto.precio_venta} onChange={handleChangeModal} />
-                                <input type="number" name="precio_compra" placeholder="Precio de compra" value={nuevoProducto.precio_compra} onChange={handleChangeModal} />
-                                <select name="categoria_id" value={nuevoProducto.categoria_id} onChange={handleChangeModal}>
-                                    <option value="">Seleccionar categoría</option>
-                                    {categorias.map(cat => (
-                                        <option key={cat.id_categoria} value={cat.id_categoria}>{cat.nombre}</option>
-                                    ))}
-                                </select>
-                                <input name="proveedor_id" placeholder="ID proveedor" value={nuevoProducto.proveedor_id} onChange={handleChangeModal} />
-                                <input type="date" name="fecha_vencimiento" value={nuevoProducto.fecha_vencimiento} onChange={handleChangeModal} />
-                                <input type="number" name="stock_actual" placeholder="Stock actual" value={nuevoProducto.stock_actual} onChange={handleChangeModal} />
-                                <input type="number" name="stock_minimo" placeholder="Stock mínimo" value={nuevoProducto.stock_minimo} onChange={handleChangeModal} />
-                                <input name="ubicacion" placeholder="Ubicación" value={nuevoProducto.ubicacion} onChange={handleChangeModal} />
-                            </div>
-                            <div className="modal-actions-unique">
-                                <button className="save-button-unique" onClick={handleGuardar}>{modoEdicion ? 'Actualizar' : 'Guardar'}</button>
-                                <button className="cancel-button-unique" onClick={() => setModalVisible(false)}>Cancelar</button>
-                            </div>
-                        </div>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={handleExportPDF}
+                            className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+                        >
+                            <FaFilePdf /> Exportar PDF
+                        </button>
+                        <button
+                            onClick={() => setModalVisible(true)}
+                            className="flex items-center gap-2 rounded-lg bg-brand-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-primary/90"
+                        >
+                            <FaPlus /> Agregar Producto
+                        </button>
                     </div>
-                )}
-                <div className="inventory-header-unique">
-                    <h2>Inventario</h2>
-                    <button className="export-pdf-button-unique" onClick={handleExportPDF}>
-                        <FaFilePdf style={{ marginRight: '5px' }} /> Exportar PDF
-                    </button>
-                    <button className="add-button-unique" onClick={() => setModalVisible(true)}>+ Agregar Producto</button>                    
                 </div>
 
-                <div className="inventory-filters-unique">
-                    <input
-                        type="text"
-                        placeholder="Buscar producto..."
-                        value={filtroNombre}
-                        onChange={(e) => setFiltroNombre(e.target.value)}
-                    />
-                    <select
+                <div className="mb-8 flex flex-wrap gap-3">
+                    <div className="relative flex-1 min-w-[220px]">
+                        <FaSearch className="absolute top-1/2 left-3 -translate-y-1/2 text-sm text-slate-500" />
+                        <input
+                            type="text"
+                            placeholder="Buscar producto..."
+                            value={filtroNombre}
+                            onChange={(e) => setFiltroNombre(e.target.value)}
+                            className={`${fieldClass} pl-10`}
+                        />
+                    </div>
+                    <Select
+                        icon={FaTag}
                         value={filtroCategoria}
-                        onChange={(e) => setFiltroCategoria(e.target.value)}
-                    >
-                        <option value="todos">Todos</option>
-                        {categorias.map((cat) => (
-                            <option key={cat.id_categoria} value={cat.id_categoria}>
-                                {cat.nombre}
-                            </option>
-                        ))}
-                    </select>
+                        onChange={setFiltroCategoria}
+                        options={categoriaOptions}
+                        className="w-56"
+                    />
                 </div>
 
                 {loading ? (
-                    <p>Cargando productos...</p>
+                    <div className="flex items-center gap-2 py-16 text-sm text-slate-400">
+                        <FaSpinner className="animate-spin" /> Cargando productos...
+                    </div>
+                ) : products.length === 0 ? (
+                    <p className="py-16 text-center text-sm text-slate-400">No se encontraron productos.</p>
                 ) : (
-                    <div className="product-grid-unique">
-                        {products.map((product) => {
-                            return (
-                                <div key={product.id_producto} className="product-card-unique">
-                                    <img src={`${import.meta.env.VITE_API_URL.replace('/api', '')}/images/${product.imagen}`} alt={product.nombre} />
-                                    <h3>{product.nombre}</h3>
-                                    <p>Stock: {product.stock_actual} unidades</p>
-                                    <p className="price">S/ {Number(product.precio_venta).toFixed(2)}</p>
-                                    <div className="card-actions-unique">
-                                        <button className="edit-button-unique" onClick={() => handleEditar(product)}>✏️ Editar</button>
-                                        <button className="delete-button-unique" onClick={() => handleEliminar(product.id_producto)}>🗑 Eliminar</button>
-                                    </div>
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                        {products.map((product) => (
+                            <div
+                                key={product.id_producto}
+                                className="group rounded-xl border border-white/10 bg-white/5 p-4 transition hover:border-white/20"
+                            >
+                                <img
+                                    src={`${import.meta.env.VITE_API_URL.replace('/api', '')}/images/${product.imagen}`}
+                                    alt={product.nombre}
+                                    className="mb-3 h-36 w-full rounded-lg object-cover"
+                                />
+                                <h3 className="truncate text-sm font-semibold text-white">{product.nombre}</h3>
+                                <p className="mt-1 text-xs text-slate-400">Stock: {product.stock_actual} unidades</p>
+                                <p className="mt-1 text-sm font-semibold text-brand-secondary">
+                                    S/ {Number(product.precio_venta).toFixed(2)}
+                                </p>
+                                <div className="mt-4 flex gap-2">
+                                    <button
+                                        onClick={() => handleEditar(product)}
+                                        className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 py-1.5 text-xs font-medium text-slate-300 transition hover:border-brand-primary/40 hover:text-brand-secondary"
+                                    >
+                                        <FaPen className="text-[10px]" /> Editar
+                                    </button>
+                                    <button
+                                        onClick={() => handleEliminar(product.id_producto)}
+                                        className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-red-500/20 bg-red-500/5 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-500/10"
+                                    >
+                                        <FaTrash className="text-[10px]" /> Eliminar
+                                    </button>
                                 </div>
-                            );
-                        })}
+                            </div>
+                        ))}
                     </div>
                 )}
             </main>
+
+            {modalVisible && (
+                <div className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/70 p-4">
+                    <div className="w-full max-w-2xl rounded-xl border border-white/10 bg-[#121a2b] p-6 shadow-2xl">
+                        <h2 className="mb-5 text-lg font-semibold text-white">
+                            {modoEdicion ? 'Editar producto' : 'Registrar nuevo producto'}
+                        </h2>
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            <input name="codigo" placeholder="Código" value={nuevoProducto.codigo} onChange={handleChangeModal} className={fieldClass} />
+                            <input name="nombre" placeholder="Nombre" value={nuevoProducto.nombre} onChange={handleChangeModal} className={fieldClass} />
+                            <input
+                                name="imagen" type="file" accept="image/*" onChange={handleImagenUpload}
+                                className="w-full rounded-lg border border-white/10 bg-white/5 py-2 pl-3 text-sm text-slate-400 outline-none file:mr-3 file:rounded-md file:border-0 file:bg-brand-primary/15 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-brand-secondary hover:file:bg-brand-primary/25"
+                            />
+                            <input name="descripcion" placeholder="Descripción" value={nuevoProducto.descripcion} onChange={handleChangeModal} className={fieldClass} />
+                            <input type="number" name="precio_venta" placeholder="Precio de venta" value={nuevoProducto.precio_venta} onChange={handleChangeModal} className={fieldClass} />
+                            <input type="number" name="precio_compra" placeholder="Precio de compra" value={nuevoProducto.precio_compra} onChange={handleChangeModal} className={fieldClass} />
+                            <Select
+                                value={String(nuevoProducto.categoria_id || '')}
+                                onChange={(v) => setNuevoProducto(prev => ({ ...prev, categoria_id: v }))}
+                                placeholder="Seleccionar categoría"
+                                options={categorias.map((cat) => ({ value: String(cat.id_categoria), label: cat.nombre }))}
+                            />
+                            <input name="proveedor_id" placeholder="ID proveedor" value={nuevoProducto.proveedor_id} onChange={handleChangeModal} className={fieldClass} />
+                            <input type="date" name="fecha_vencimiento" value={nuevoProducto.fecha_vencimiento} onChange={handleChangeModal} className={fieldClass} />
+                            <input type="number" name="stock_actual" placeholder="Stock actual" value={nuevoProducto.stock_actual} onChange={handleChangeModal} className={fieldClass} />
+                            <input type="number" name="stock_minimo" placeholder="Stock mínimo" value={nuevoProducto.stock_minimo} onChange={handleChangeModal} className={fieldClass} />
+                            <input name="ubicacion" placeholder="Ubicación" value={nuevoProducto.ubicacion} onChange={handleChangeModal} className={fieldClass} />
+                        </div>
+                        <div className="mt-5 flex justify-end gap-3">
+                            <button
+                                onClick={() => setModalVisible(false)}
+                                className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/10"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={handleGuardar}
+                                className="rounded-lg bg-brand-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-primary/90"
+                            >
+                                {modoEdicion ? 'Actualizar' : 'Guardar'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {popupConfirmVisible && (
+                <div className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/70 p-4">
+                    <div className="w-full max-w-sm rounded-xl border border-white/10 bg-[#121a2b] p-6 shadow-2xl">
+                        <h3 className="text-base font-semibold text-white">¿Estás seguro de eliminar este producto?</h3>
+                        <p className="mt-1.5 text-sm text-slate-400">Esta acción no se puede deshacer.</p>
+                        <div className="mt-5 flex justify-end gap-3">
+                            <button
+                                onClick={() => setPopupConfirmVisible(false)}
+                                className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/10"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={confirmarEliminacion}
+                                className="rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-500/90"
+                            >
+                                Sí, eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

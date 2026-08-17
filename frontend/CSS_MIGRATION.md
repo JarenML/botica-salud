@@ -8,10 +8,10 @@ Short rule: a screen is migrated to Tailwind only when it's touched for a real r
 |---|---|---|
 | `header.css` | Header | Pending |
 | `home.css` | Home | Pending |
-| `auth.css` | Login / Register | Pending (global reset already isolated in `@layer base`) |
+| ~~`auth.css`~~ | Login / Register | **Done** — both forms are pure Tailwind; `auth.css` deleted |
 | `inventario.css` | Inventory | Pending |
 | `category.css` | Categories | Pending |
-| `client.css` | Clients | Pending |
+| `client.css` | Clients | Pending (`.hidden` rule isolated in `@layer components`) |
 | `supplier.css` | Suppliers | Pending |
 | `sale.css` | Sales | Pending |
 | `register_sale.css` | Register Sale | Pending |

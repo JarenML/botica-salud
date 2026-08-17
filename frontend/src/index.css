@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+/* Brand palette — source of truth: the login card design.
+   Reuse these tokens for any new UI instead of picking new hex values. */
+@theme {
+    --color-brand-primary: #6a56ff;
+    --color-brand-secondary: #8c85e8;
+    --color-brand-ink: #0d1321;
+}

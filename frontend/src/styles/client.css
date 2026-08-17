@@ -105,8 +105,10 @@
     background-color: rgba(255, 215, 0, 0.1);
 }
 
-.hidden {
-    display: none;
+@layer components {
+    .hidden {
+        display: none;
+    }
 }
 
 /* Modal Form Styles */

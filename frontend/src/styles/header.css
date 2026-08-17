@@ -1,13 +1,13 @@
 /* CABECERA FIJA — diseño corporativo, minimalista y moderno */
 .home-header {
-    --hdr-bg: #0d1321;
+    --hdr-bg: var(--color-brand-ink);
     --hdr-bg-soft: #121a2b;
     --hdr-border: rgba(255, 255, 255, 0.08);
     --hdr-text: #cbd5e1;
     --hdr-text-strong: #f8fafc;
     --hdr-muted: #6b7690;
-    --hdr-accent: #4f8cff;
-    --hdr-accent-soft: rgba(79, 140, 255, 0.14);
+    --hdr-accent: var(--color-brand-primary);
+    --hdr-accent-soft: rgba(106, 86, 255, 0.14);
 
     display: flex;
     align-items: center;
@@ -37,7 +37,7 @@
     width: 34px;
     height: 34px;
     border-radius: 9px;
-    background: linear-gradient(135deg, var(--hdr-accent), #2f5fce);
+    background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-secondary));
     color: #fff;
     font-size: 1rem;
     flex-shrink: 0;

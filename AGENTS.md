@@ -49,7 +49,19 @@ Tailwind is installed (`@tailwindcss/vite`) and is now the default for **all new
 - A screen/component is migrated to Tailwind **only** when it's already being touched for a real reason (bug, feature, redesign request) — never as a standalone migration task. This keeps it from competing with Phase 1 priorities.
 - When a screen reaches 100% Tailwind, delete its legacy `.css` file. A `.css` file left behind after migration is a dangling vine, not a finished migration.
 - Track status in `frontend/CSS_MIGRATION.md`; update it whenever a screen's status changes.
-- Gotcha (already hit once): any global reset (`* { ... }`) must live inside `@layer base { ... }`. Unlayered CSS always wins over Tailwind's layered utilities regardless of specificity, so a bare `* { padding: 0 }` silently breaks every `p-*`/`m-*` utility app-wide.
+- Gotcha (hit 3 times already, across `index.css`, `auth.css`, `client.css`): **any legacy CSS rule not inside a Tailwind `@layer` always wins over Tailwind's utilities, regardless of specificity** — this includes global resets (`* { padding: 0 }`, breaks every `p-*`/`m-*`) and plain-sounding class names that collide with real Tailwind utilities (a legacy `.hidden { display: none }` silently defeats `lg:flex`, `.active`, `.container`, etc. would do the same). Since App.jsx statically imports every page, every legacy `.css` file's rules are present on every route, not just its own. Before migrating a screen, grep the other legacy `.css` files for bare rules using Tailwind-shaped class names and wrap them in `@layer base` (resets) or `@layer components` (component classes).
+
+## Brand Palette
+
+Source of truth: the `@theme` block in `frontend/src/index.css`. Currently:
+
+- `--color-brand-primary` (`#6a56ff`) / `--color-brand-secondary` (`#8c85e8`) — the one accent identity color for the whole app. In use on Header (logo mark, active nav item, user icon) and Login/Register (logo, input focus rings, submit buttons, links).
+- `--color-brand-ink` (`#0d1321`) — the shared dark page background. In use on Header and both auth screens.
+- These are real Tailwind theme tokens, not just reference hex values — use the generated utilities (`bg-brand-primary`, `text-brand-secondary`, `bg-brand-ink`, `from-brand-ink`, etc.) rather than hardcoding the hex again.
+
+This palette is the platform's actual visual identity, not a one-off treatment for the auth screens. Header and Login/Register have it today simply because those are the screens touched so far — every other screen (Inventory, Categories, Clients, Suppliers, Sales) is still on its own legacy look-and-feel purely because it hasn't been migrated yet, not because it's meant to look different. As each screen goes through the CSS → Tailwind Strangler Fig migration (see above), it adopts this same palette instead of preserving its old ad-hoc colors — migrating a screen's CSS and converging it onto the brand palette are the same step, not two separate tasks. By the time the migration finishes, the whole app should read as one consistent product, not a patchwork of screens each with their own accent color.
+
+Rule: any new UI (including the AI Assistant) and any screen being migrated reuses these tokens instead of introducing a new accent color or a new dark-background hex. Home's dashboard status icons (stock/sales/clients/products) are an intentional exception — those are semantic status colors, not brand identity, and should stay distinct from brand-primary.
 
 ## Actual Repo Stack (verify before assuming)
 

@@ -1,7 +1,10 @@
 // src/components/category/CategoryList.jsx
 import React, { useEffect, useState } from 'react';
-import { FaEdit, FaTrash, FaPlus, FaSearch, FaBoxes, FaSpinner } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaPlus, FaSearch, FaBoxes, FaSpinner, FaInfoCircle, FaTimes } from 'react-icons/fa';
 import categoryService from '../../services/category.service';
+
+const formatFechaHora = (iso) =>
+    iso ? new Date(iso).toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' }) : '—';
 
 const fieldClass =
     'w-full rounded-lg border border-white/10 bg-white/5 px-3.5 py-2.5 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-brand-primary focus:bg-white/7 focus:ring-1 focus:ring-brand-primary';
@@ -16,6 +19,7 @@ const CategoryList = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [categoryToDelete, setCategoryToDelete] = useState(null);
+    const [categoryInfo, setCategoryInfo] = useState(null);
 
     useEffect(() => {
         fetchCategories();
@@ -183,6 +187,12 @@ const CategoryList = () => {
                                             <FaTrash className="text-[10px]" /> Eliminar
                                         </button>
                                     </div>
+                                    <button
+                                        onClick={() => setCategoryInfo(category)}
+                                        className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 py-1.5 text-xs font-medium text-slate-300 transition hover:border-brand-primary/40 hover:text-brand-secondary"
+                                    >
+                                        <FaInfoCircle className="text-[10px]" /> Ver info
+                                    </button>
                                 </div>
                             </div>
                         ))}
@@ -228,6 +238,56 @@ const CategoryList = () => {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {categoryInfo && (
+                <div className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/70 p-4">
+                    <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-xl border border-white/10 bg-[#121a2b] p-6 shadow-2xl">
+                        <div className="flex items-start justify-between gap-4">
+                            <div className="flex items-center gap-3">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-primary/15 text-sm font-bold text-brand-secondary">
+                                    {categoryInfo.nombre.charAt(0).toUpperCase()}
+                                </div>
+                                <h3 className="text-lg font-semibold text-white">{categoryInfo.nombre}</h3>
+                            </div>
+                            <button
+                                onClick={() => setCategoryInfo(null)}
+                                className="shrink-0 text-slate-500 transition hover:text-white"
+                            >
+                                <FaTimes className="text-sm" />
+                            </button>
+                        </div>
+
+                        <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                            <div>
+                                <dt className="text-xs text-slate-500">ID</dt>
+                                <dd className="text-slate-200">{categoryInfo.id_categoria}</dd>
+                            </div>
+                            <div>
+                                <dt className="text-xs text-slate-500">Creada</dt>
+                                <dd className="text-slate-200">{formatFechaHora(categoryInfo.fecha_creacion)}</dd>
+                            </div>
+                            <div>
+                                <dt className="text-xs text-slate-500">Actualizada</dt>
+                                <dd className="text-slate-200">{formatFechaHora(categoryInfo.fecha_actualizacion)}</dd>
+                            </div>
+                        </dl>
+
+                        <div className="mt-4">
+                            <p className="text-xs text-slate-500">Descripción</p>
+                            <p className="mt-1 text-sm text-slate-300">{categoryInfo.descripcion || 'Sin descripción.'}</p>
+                        </div>
+
+                        <div className="mt-5 flex justify-end">
+                            <button
+                                onClick={() => setCategoryInfo(null)}
+                                className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/10"
+                            >
+                                Cerrar
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

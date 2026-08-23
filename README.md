@@ -12,7 +12,7 @@ docker compose -f docker-compose-dev.yml up -d
 
 - Backend: http://localhost:3000 (docs at `/api-docs`)
 - Frontend: http://localhost:5173
-- Postgres: localhost:5432
+- Postgres: localhost:5433 (mapped to avoid clashing with a native Postgres install on 5432)
 
 The backend applies Prisma migrations automatically on startup. The `backend/` and `frontend/` code is mounted as a volume, so changes are reflected via hot reload without rebuilding the image. If you add a new dependency (`npm install`), rebuild with `docker compose -f docker-compose-dev.yml build`.
 

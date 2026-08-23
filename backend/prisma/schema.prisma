@@ -7,11 +7,12 @@ datasource db {
 }
 
 model categoria {
-  id_categoria   Int        @id @default(autoincrement())
-  nombre         String     @unique @db.VarChar(50)
-  descripcion    String?    @db.VarChar(255)
-  fecha_creacion DateTime?  @default(now()) @db.Timestamp(6)
-  producto       producto[]
+  id_categoria       Int        @id @default(autoincrement())
+  nombre             String     @unique @db.VarChar(50)
+  descripcion        String?    @db.VarChar(255)
+  fecha_creacion     DateTime?  @default(now()) @db.Timestamp(6)
+  fecha_actualizacion DateTime? @updatedAt @db.Timestamp(6)
+  producto           producto[]
 }
 
 model cliente {

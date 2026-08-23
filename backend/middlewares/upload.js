@@ -1,16 +1,7 @@
 const multer = require('multer');
-const path = require('path');
 
-// Carpeta destino
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'public/images');
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.originalname);  
-    }
-});
-
-const upload = multer({ storage });
+// Se guarda en memoria; el controlador recién escribe el archivo a disco
+// una vez que la operacion en base de datos tuvo exito.
+const upload = multer({ storage: multer.memoryStorage() });
 
 module.exports = upload;

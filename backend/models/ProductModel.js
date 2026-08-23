@@ -6,6 +6,8 @@ const toBoolean = (value) => {
     return Boolean(value);
 };
 
+const toDate = (value) => (value ? new Date(value) : value);
+
 const mapProducto = (producto) => {
     if (!producto) return producto;
     const { categoria, proveedor, ...resto } = producto;
@@ -31,7 +33,7 @@ class ProductModel {
                 precio_compra: datos.precio_compra,
                 categoria_id: Number(datos.categoria_id),
                 proveedor_id: Number(datos.proveedor_id),
-                fecha_vencimiento: datos.fecha_vencimiento,
+                fecha_vencimiento: toDate(datos.fecha_vencimiento),
                 requiere_receta: toBoolean(datos.requiere_receta),
                 stock_actual: datos.stock_actual !== undefined ? Number(datos.stock_actual) : undefined,
                 stock_minimo: datos.stock_minimo !== undefined ? Number(datos.stock_minimo) : undefined,
@@ -75,7 +77,7 @@ class ProductModel {
                 precio_compra: datos.precio_compra,
                 categoria_id: Number(datos.categoria_id),
                 proveedor_id: Number(datos.proveedor_id),
-                fecha_vencimiento: datos.fecha_vencimiento,
+                fecha_vencimiento: toDate(datos.fecha_vencimiento),
                 requiere_receta: toBoolean(datos.requiere_receta),
                 stock_actual: Number(datos.stock_actual),
                 stock_minimo: Number(datos.stock_minimo),

@@ -1,17 +1,25 @@
+const fs = require('fs/promises');
+const path = require('path');
 const ProductService = require('../services/ProductService');
 
+const IMAGES_DIR = path.join(__dirname, '..', 'public', 'images');
+
+async function guardarImagen(file) {
+    await fs.writeFile(path.join(IMAGES_DIR, file.originalname), file.buffer);
+}
+
 class ProductController {
-    
+
     async crearProducto(req, res) {
         try {
-            console.log(req.file); 
             const datos = req.body;
-            console.log("BODY: ", datos)
             if (req.file) {
-                console.log(req.file.filename);
-                datos.imagen = req.file.filename;
+                datos.imagen = req.file.originalname;
             }
             const nuevoProducto = await ProductService.crearProducto(datos);
+            if (req.file) {
+                await guardarImagen(req.file);
+            }
             res.status(201).json(nuevoProducto);
         } catch (error) {
             res.status(400).json({ message: `Error al crear el producto: ${error.message}` });
@@ -46,11 +54,13 @@ class ProductController {
         try {
             const datos = req.body
             if (req.file) {
-                console.log(req.file.filename);
-                datos.imagen = req.file.filename;
+                datos.imagen = req.file.originalname;
             }
             const productoActualizado = await ProductService.actualizarProducto(req.params.id, datos);
-            res.status(200).json(productoActualizado); 
+            if (req.file) {
+                await guardarImagen(req.file);
+            }
+            res.status(200).json(productoActualizado);
         } catch (error) {
             res.status(400).json({ message: `Error al actualizar el producto: ${error.message}` });
         }

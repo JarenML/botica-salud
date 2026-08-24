@@ -5,6 +5,7 @@ import {
     FaPhone, FaEnvelope, FaMapMarkerAlt, FaBirthdayCake, FaSpinner, FaInfoCircle
 } from 'react-icons/fa';
 import clientService from '../../services/client.service';
+import saleService from '../../services/sale.service';
 import { useToast } from '../../context/ToastContext';
 
 const getErrorMessage = (error, fallback) => error?.response?.data?.message || fallback;
@@ -20,6 +21,14 @@ const formatFecha = (iso) => (iso ? new Date(iso).toLocaleDateString('es-PE') : 
 const formatFechaHora = (iso) =>
     iso ? new Date(iso).toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' }) : '—';
 
+const capitalizar = (texto) => (texto ? texto.charAt(0).toUpperCase() + texto.slice(1) : texto);
+
+const badgeClass = (estado) => ({
+    pagado: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400',
+    pendiente: 'border-amber-500/20 bg-amber-500/10 text-amber-400',
+    anulado: 'border-red-500/20 bg-red-500/10 text-red-400',
+}[estado] || 'border-white/10 bg-white/5 text-slate-300');
+
 const emptyForm = { dni: '', nombre: '', apellido: '', telefono: '', email: '', direccion: '', fecha_nacimiento: '' };
 
 const ClientList = () => {
@@ -32,11 +41,32 @@ const ClientList = () => {
     const [showForm, setShowForm] = useState(false);
     const [clientToDelete, setClientToDelete] = useState(null);
     const [clientInfo, setClientInfo] = useState(null);
+    const [infoTab, setInfoTab] = useState('info');
+    const [clientSales, setClientSales] = useState([]);
+    const [loadingSales, setLoadingSales] = useState(false);
     const toast = useToast();
 
     useEffect(() => {
         fetchClients();
     }, []);
+
+    useEffect(() => {
+        if (!clientInfo) return;
+        setInfoTab('info');
+
+        const fetchClientSales = async () => {
+            setLoadingSales(true);
+            try {
+                const data = await saleService.listSales();
+                setClientSales(data.filter((venta) => venta.cliente_id === clientInfo.id_cliente));
+            } catch (error) {
+                toast.error(getErrorMessage(error, 'Error al cargar las compras del cliente.'));
+            } finally {
+                setLoadingSales(false);
+            }
+        };
+        fetchClientSales();
+    }, [clientInfo]);
 
     const fetchClients = async () => {
         try {
@@ -372,7 +402,7 @@ const ClientList = () => {
 
             {clientInfo && (
                 <div className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/70 p-4">
-                    <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-xl border border-white/10 bg-[#121a2b] p-6 shadow-2xl">
+                    <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-white/10 bg-[#121a2b] p-6 shadow-2xl">
                         <div className="flex items-start justify-between gap-4">
                             <div className="flex items-center gap-3">
                                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-primary/15 text-sm font-bold text-brand-secondary">
@@ -388,33 +418,87 @@ const ClientList = () => {
                             </button>
                         </div>
 
-                        <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
-                            <div>
-                                <dt className="text-xs text-slate-500">DNI</dt>
-                                <dd className="text-slate-200">{clientInfo.dni || '—'}</dd>
-                            </div>
-                            <div>
-                                <dt className="text-xs text-slate-500">Registrado</dt>
-                                <dd className="text-slate-200">{formatFechaHora(clientInfo.fecha_creacion)}</dd>
-                            </div>
-                            <div>
-                                <dt className="text-xs text-slate-500">Teléfono</dt>
-                                <dd className="text-slate-200">{clientInfo.telefono || '—'}</dd>
-                            </div>
-                            <div>
-                                <dt className="text-xs text-slate-500">Fecha de nacimiento</dt>
-                                <dd className="text-slate-200">{formatFecha(clientInfo.fecha_nacimiento)}</dd>
-                            </div>
-                            <div className="col-span-2">
-                                <dt className="text-xs text-slate-500">Email</dt>
-                                <dd className="truncate text-slate-200" title={clientInfo.email}>{clientInfo.email || '—'}</dd>
-                            </div>
-                        </dl>
-
-                        <div className="mt-4">
-                            <p className="text-xs text-slate-500">Dirección</p>
-                            <p className="mt-1 text-sm text-slate-300">{clientInfo.direccion || 'Sin dirección registrada.'}</p>
+                        <div className="mt-5 flex gap-1 border-b border-white/10">
+                            <button
+                                onClick={() => setInfoTab('info')}
+                                className={`-mb-px border-b-2 px-3 py-2 text-sm font-medium transition ${
+                                    infoTab === 'info'
+                                        ? 'border-brand-primary text-white'
+                                        : 'border-transparent text-slate-400 hover:text-white'
+                                }`}
+                            >
+                                Información
+                            </button>
+                            <button
+                                onClick={() => setInfoTab('compras')}
+                                className={`-mb-px border-b-2 px-3 py-2 text-sm font-medium transition ${
+                                    infoTab === 'compras'
+                                        ? 'border-brand-primary text-white'
+                                        : 'border-transparent text-slate-400 hover:text-white'
+                                }`}
+                            >
+                                Compras{clientSales.length > 0 && ` (${clientSales.length})`}
+                            </button>
                         </div>
+
+                        {infoTab === 'info' ? (
+                            <>
+                                <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                                    <div>
+                                        <dt className="text-xs text-slate-500">DNI</dt>
+                                        <dd className="text-slate-200">{clientInfo.dni || '—'}</dd>
+                                    </div>
+                                    <div>
+                                        <dt className="text-xs text-slate-500">Registrado</dt>
+                                        <dd className="text-slate-200">{formatFechaHora(clientInfo.fecha_creacion)}</dd>
+                                    </div>
+                                    <div>
+                                        <dt className="text-xs text-slate-500">Teléfono</dt>
+                                        <dd className="text-slate-200">{clientInfo.telefono || '—'}</dd>
+                                    </div>
+                                    <div>
+                                        <dt className="text-xs text-slate-500">Fecha de nacimiento</dt>
+                                        <dd className="text-slate-200">{formatFecha(clientInfo.fecha_nacimiento)}</dd>
+                                    </div>
+                                    <div className="col-span-2">
+                                        <dt className="text-xs text-slate-500">Email</dt>
+                                        <dd className="truncate text-slate-200" title={clientInfo.email}>{clientInfo.email || '—'}</dd>
+                                    </div>
+                                </dl>
+
+                                <div className="mt-4">
+                                    <p className="text-xs text-slate-500">Dirección</p>
+                                    <p className="mt-1 text-sm text-slate-300">{clientInfo.direccion || 'Sin dirección registrada.'}</p>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="mt-5">
+                                {loadingSales ? (
+                                    <div className="flex items-center gap-2 py-8 text-sm text-slate-400">
+                                        <FaSpinner className="animate-spin" /> Cargando compras...
+                                    </div>
+                                ) : clientSales.length === 0 ? (
+                                    <p className="py-8 text-center text-sm text-slate-400">Este cliente no tiene compras registradas.</p>
+                                ) : (
+                                    <div className="max-h-72 divide-y divide-white/5 overflow-y-auto rounded-lg border border-white/10">
+                                        {clientSales.map((venta) => (
+                                            <div key={venta.id_venta} className="flex items-center justify-between gap-3 px-3 py-2.5 text-sm">
+                                                <div className="min-w-0">
+                                                    <p className="truncate font-medium text-white">{venta.codigo_venta || `Venta #${venta.id_venta}`}</p>
+                                                    <p className="text-xs text-slate-500">{formatFecha(venta.fecha_creacion)}</p>
+                                                </div>
+                                                <div className="flex shrink-0 items-center gap-3">
+                                                    <span className={`inline-block rounded-full border px-2.5 py-0.5 text-xs font-medium ${badgeClass(venta.estado)}`}>
+                                                        {capitalizar(venta.estado)}
+                                                    </span>
+                                                    <span className="font-semibold text-brand-secondary">S/ {Number(venta.total).toFixed(2)}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
 
                         <div className="mt-5 flex justify-end">
                             <button

@@ -7,6 +7,11 @@ const saleService = {
         return res.data;
     },
 
+    getSaleById: async (id) => {
+        const res = await api.get(`/ventas/${id}`);
+        return res.data;
+    },
+
     createSale: async (data) => {
         const res = await api.post('/ventas', data);
         return res.data;

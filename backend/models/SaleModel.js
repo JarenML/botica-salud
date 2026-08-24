@@ -2,11 +2,18 @@ const prisma = require('../config/prisma');
 
 const mapVenta = (venta) => {
     if (!venta) return venta;
-    const { usuario, cliente, ...resto } = venta;
+    const { usuario, cliente, detalle_venta, ...resto } = venta;
     return {
         ...resto,
         usuario_nombre: usuario?.nombre,
         cliente_nombre: cliente?.nombre,
+        ...(detalle_venta && {
+            detalle_venta: detalle_venta.map(({ producto, ...detalle }) => ({
+                ...detalle,
+                producto_nombre: producto?.nombre,
+                producto_codigo: producto?.codigo,
+            })),
+        }),
     };
 };
 
@@ -102,7 +109,7 @@ class SaleModel {
     async obtenerVentaPorId(id) {
         const venta = await prisma.venta.findUnique({
             where: { id_venta: Number(id) },
-            include: { usuario: true, cliente: true }
+            include: { usuario: true, cliente: true, detalle_venta: { include: { producto: true } } }
         });
         return mapVenta(venta);
     }

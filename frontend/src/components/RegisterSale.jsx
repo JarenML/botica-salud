@@ -70,21 +70,18 @@ const RegistrarVenta = () => {
             codigo_venta: `VEN-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`,
             usuario_id: parseInt(cajero),
             cliente_id: parseInt(cliente),
-            total: Number(total.toFixed(2)),
             metodo_pago: metodos[metodoPago],
             estado: 'pendiente',
-            observaciones: 'ninguna'
+            observaciones: 'ninguna',
+            items: carrito.map(item => ({
+                producto_id: item.id_producto,
+                cantidad: item.cantidad,
+            })),
         };
-    
+
         try {
             await saleService.createSale(venta);
-    
-            // Actualizar stock de cada producto vendido
-            for (const item of carrito) {
-                const nuevoStock = item.stock_actual - item.cantidad;
-                await productService.updateStock(item.id_producto, nuevoStock);
-            }
-    
+
             alert('Venta registrada con éxito');
     
             // Reiniciar formulario
@@ -146,9 +143,10 @@ const RegistrarVenta = () => {
         fetchProductos();
     }, []);
 
-    const subtotal = carrito.reduce((acc, item) => acc + item.precio_venta * item.cantidad, 0);
-    const iva = subtotal * 0.16;
-    const total = subtotal + iva;
+    const IGV_TASA = 0.18;
+    const total = carrito.reduce((acc, item) => acc + item.precio_venta * item.cantidad, 0);
+    const igv = total - total / (1 + IGV_TASA);
+    const subtotal = total - igv;
 
     return (
         <div className="registrar-venta-container">
@@ -273,7 +271,7 @@ const RegistrarVenta = () => {
 
             <div className="resumen-venta">
                 <p>Subtotal: ${subtotal.toFixed(2)}</p>
-                <p>IVA (16%): ${iva.toFixed(2)}</p>
+                <p>IGV (18%): ${igv.toFixed(2)}</p>
                 <h3>Total: ${total.toFixed(2)}</h3>
                 <button className="crear-venta-btn" onClick={crearVenta}>Crear Venta</button>
             </div>

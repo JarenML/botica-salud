@@ -114,13 +114,26 @@ const options = {
                         codigo_venta: { type: 'string', maxLength: 15, nullable: true },
                         usuario_id: { type: 'integer' },
                         cliente_id: { type: 'integer' },
-                        total: { type: 'number', format: 'decimal' },
+                        total: { type: 'number', format: 'decimal', readOnly: true },
+                        igv: { type: 'number', format: 'decimal', readOnly: true, description: 'IGV (18%) desagregado del total, calculado por el backend' },
                         metodo_pago: { type: 'string', enum: ['efectivo', 'tarjeta_credito', 'tarjeta_debito', 'transferencia', 'otros'] },
                         estado: { type: 'string', enum: ['pendiente', 'pagado', 'anulado'], nullable: true },
                         observaciones: { type: 'string', maxLength: 255, nullable: true },
                         fecha_creacion: { type: 'string', format: 'date-time', readOnly: true },
+                        items: {
+                            type: 'array',
+                            description: 'Solo al crear una venta: productos a vender. El backend calcula precio_unitario, subtotal, total e igv.',
+                            items: {
+                                type: 'object',
+                                properties: {
+                                    producto_id: { type: 'integer' },
+                                    cantidad: { type: 'integer' },
+                                },
+                                required: ['producto_id', 'cantidad'],
+                            },
+                        },
                     },
-                    required: ['usuario_id', 'cliente_id', 'total', 'metodo_pago'],
+                    required: ['usuario_id', 'cliente_id', 'metodo_pago', 'items'],
                 },
                 DetalleVenta: {
                     type: 'object',

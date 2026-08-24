@@ -1,5 +1,7 @@
 const prisma = require('../config/prisma');
 
+const toDate = (value) => (value ? new Date(value) : value);
+
 class ClientModel {
 
     async crearCliente(datos) {
@@ -11,7 +13,7 @@ class ClientModel {
                 telefono: datos.telefono,
                 email: datos.email,
                 direccion: datos.direccion,
-                fecha_nacimiento: datos.fecha_nacimiento,
+                fecha_nacimiento: toDate(datos.fecha_nacimiento),
             }
         });
     }
@@ -34,7 +36,7 @@ class ClientModel {
                 telefono: datos.telefono,
                 email: datos.email,
                 direccion: datos.direccion,
-                fecha_nacimiento: datos.fecha_nacimiento,
+                fecha_nacimiento: toDate(datos.fecha_nacimiento),
             }
         });
     }

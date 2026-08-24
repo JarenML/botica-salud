@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "venta" ADD COLUMN     "igv" DECIMAL(12,2) NOT NULL DEFAULT 0;

@@ -14,6 +14,6 @@ Short rule: a screen is migrated to Tailwind only when it's touched for a real r
 | `client.css` | Clients | Pending (`.hidden` rule isolated in `@layer components`) |
 | `supplier.css` | Suppliers | Pending |
 | `sale.css` | Sales | Pending |
-| `register_sale.css` | Register Sale | Pending (bare `h2 { color }` rule scoped to `.registrar-venta-container h2` inside `@layer components` — it was leaking onto every `<h2>` app-wide) |
+| ~~`register_sale.css`~~ | Register Sale | **Done** — `RegisterSale.jsx` is now pure Tailwind; `register_sale.css` deleted |
 
 **New:** any new UI (AI Assistant, MCP, etc.) is built directly in Tailwind, without going through this table.

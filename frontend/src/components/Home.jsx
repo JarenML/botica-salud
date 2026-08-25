@@ -26,12 +26,13 @@ const Home = () => {
 
                 setTotalProductos(products.data.length);
 
-                // las ventas se registran solo los que estan pagados
+                // las ventas se cuentan por fecha de pago, no de creacion
                 const hoy = new Date().toISOString().split('T')[0];
                 const ventasDeHoyPagadas = sales.filter(
                     (venta) =>
-                        new Date(venta.fecha_creacion).toISOString().split('T')[0] === hoy &&
-                        venta.estado.toLowerCase() === 'pagado'
+                        venta.estado.toLowerCase() === 'pagado' &&
+                        venta.fecha_pago &&
+                        new Date(venta.fecha_pago).toISOString().split('T')[0] === hoy
                 );
                 const totalVentasHoy = ventasDeHoyPagadas.reduce((acc, venta) => acc + parseFloat(venta.total), 0);
                 setVentasHoy({ total: totalVentasHoy, cantidad: ventasDeHoyPagadas.length });

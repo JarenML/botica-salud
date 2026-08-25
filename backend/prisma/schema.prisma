@@ -97,6 +97,7 @@ model venta {
   estado         estado_venta?
   observaciones  String?         @db.VarChar(255)
   fecha_creacion DateTime?       @default(now()) @db.Timestamp(6)
+  fecha_pago     DateTime?       @db.Timestamp(6)
   detalle_venta  detalle_venta[]
   cliente        cliente         @relation(fields: [cliente_id], references: [id_cliente], onDelete: NoAction, onUpdate: NoAction)
   usuario        usuario         @relation(fields: [usuario_id], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction)

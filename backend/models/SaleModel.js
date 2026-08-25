@@ -49,6 +49,7 @@ class SaleModel {
             const IGV_TASA = 0.18;
             const igv = Number((total - total / (1 + IGV_TASA)).toFixed(2));
 
+            const estado = datos.estado ?? 'pendiente';
             const venta = await tx.venta.create({
                 data: {
                     codigo_venta: datos.codigo_venta,
@@ -57,7 +58,8 @@ class SaleModel {
                     total,
                     igv,
                     metodo_pago: datos.metodo_pago,
-                    estado: datos.estado ?? 'pendiente',
+                    estado,
+                    fecha_pago: estado === 'pagado' ? new Date() : null,
                     observaciones: datos.observaciones,
                 }
             });
@@ -125,19 +127,26 @@ class SaleModel {
                 igv: datos.igv,
                 metodo_pago: datos.metodo_pago,
                 estado: datos.estado,
+                fecha_pago: datos.estado === 'pagado' ? new Date() : null,
                 observaciones: datos.observaciones,
             }
         });
     }
 
     async eliminarVenta(id) {
-        return prisma.venta.delete({ where: { id_venta: Number(id) } });
+        return prisma.$transaction(async (tx) => {
+            await tx.detalle_venta.deleteMany({ where: { venta_id: Number(id) } });
+            return tx.venta.delete({ where: { id_venta: Number(id) } });
+        });
     }
 
     async actualizarEstadoVenta(id, estado) {
         return prisma.venta.update({
             where: { id_venta: Number(id) },
-            data: { estado }
+            data: {
+                estado,
+                fecha_pago: estado === 'pagado' ? new Date() : null,
+            }
         });
     }
 }

@@ -38,6 +38,9 @@ class SaleService {
         if (!ventaExistente) {
             throw new Error('Venta no encontrada');
         }
+        if (ventaExistente.estado !== 'pendiente') {
+            throw new Error('No se puede cambiar el estado de una venta ya resuelta (pagada o anulada)');
+        }
         return await SaleModel.actualizarEstadoVenta(id, estado);
     }
 }

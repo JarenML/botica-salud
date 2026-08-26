@@ -201,14 +201,16 @@ const Sale = () => {
                                                 >
                                                     <FaInfoCircle className="text-xs" />
                                                 </button>
-                                                <button
-                                                    onClick={() => setVentaCambiandoEstado(venta)}
-                                                    aria-label="Cambiar estado"
-                                                    title="Cambiar estado"
-                                                    className="shrink-0 rounded-lg border border-white/10 bg-white/5 p-2 text-slate-300 transition hover:border-brand-primary/40 hover:text-brand-secondary"
-                                                >
-                                                    <FaExchangeAlt className="text-xs" />
-                                                </button>
+                                                {venta.estado === 'pendiente' && (
+                                                    <button
+                                                        onClick={() => setVentaCambiandoEstado(venta)}
+                                                        aria-label="Cambiar estado"
+                                                        title="Cambiar estado"
+                                                        className="shrink-0 rounded-lg border border-white/10 bg-white/5 p-2 text-slate-300 transition hover:border-brand-primary/40 hover:text-brand-secondary"
+                                                    >
+                                                        <FaExchangeAlt className="text-xs" />
+                                                    </button>
+                                                )}
                                                 <button
                                                     onClick={() => setVentaAEliminar(venta)}
                                                     aria-label="Eliminar venta"

@@ -95,10 +95,15 @@ class SaleModel {
         });
     }
 
-    async listarVentas(codigo_venta = null) {
+    async listarVentas(codigo_venta = null, estado = null) {
         const where = {};
         if (codigo_venta) {
             where.codigo_venta = { contains: codigo_venta, mode: 'insensitive' };
+        }
+        if (estado === 'pendiente') {
+            where.estado = 'pendiente';
+        } else if (estado === 'resuelto') {
+            where.estado = { in: ['pagado', 'anulado'] };
         }
 
         const ventas = await prisma.venta.findMany({

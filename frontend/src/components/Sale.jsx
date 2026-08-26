@@ -1,13 +1,17 @@
 // src/components/Sale.jsx
 import React, { useEffect, useState } from 'react';
-import { FaChartLine, FaSearch, FaTrash, FaSpinner, FaExchangeAlt, FaFilter, FaInfoCircle, FaTimes } from 'react-icons/fa';
+import { FaChartLine, FaSearch, FaTrash, FaSpinner, FaExchangeAlt, FaInfoCircle, FaTimes } from 'react-icons/fa';
 import saleService from '../services/sale.service';
-import Select from './ui/Select';
 import { useToast } from '../context/ToastContext';
 
 const getErrorMessage = (error, fallback) => error?.response?.data?.message || fallback;
 
 const ESTADOS = ['pendiente', 'pagado', 'anulado'];
+
+const TABS = [
+    { value: 'pendiente', label: 'Pendiente' },
+    { value: 'resuelto', label: 'Resuelto' },
+];
 
 const capitalizar = (texto) => texto ? texto.charAt(0).toUpperCase() + texto.slice(1) : texto;
 
@@ -26,15 +30,10 @@ const badgeClass = (estado) => ({
     anulado: 'border-red-500/20 bg-red-500/10 text-red-400',
 }[estado] || 'border-white/10 bg-white/5 text-slate-300');
 
-const filtroOptions = [
-    { value: 'todas', label: 'Todas' },
-    ...ESTADOS.map((e) => ({ value: e, label: capitalizar(e) })),
-];
-
 const Sale = () => {
     const [ventas, setVentas] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [filtro, setFiltro] = useState('todas');
+    const [filtro, setFiltro] = useState('pendiente');
     const [busqueda, setBusqueda] = useState('');
     const [ventaAEliminar, setVentaAEliminar] = useState(null);
     const [ventaCambiandoEstado, setVentaCambiandoEstado] = useState(null);
@@ -43,10 +42,10 @@ const Sale = () => {
     const [cargandoDetalle, setCargandoDetalle] = useState(false);
     const toast = useToast();
 
-    const fetchVentas = async () => {
+    const fetchVentas = async (estado) => {
         setLoading(true);
         try {
-            const data = await saleService.listSales();
+            const data = await saleService.listSales({ estado });
             setVentas(data);
         } catch (error) {
             toast.error(getErrorMessage(error, 'Error al cargar las ventas.'));
@@ -56,11 +55,10 @@ const Sale = () => {
     };
 
     useEffect(() => {
-        fetchVentas();
-    }, []);
+        fetchVentas(filtro);
+    }, [filtro]);
 
     const ventasFiltradas = ventas.filter((venta) =>
-        (filtro === 'todas' || venta.estado === filtro) &&
         (venta.codigo_venta || '').toLowerCase().includes(busqueda.toLowerCase())
     );
 
@@ -69,10 +67,8 @@ const Sale = () => {
         if (nuevoEstado === venta.estado) return;
         try {
             await saleService.changeStateService(venta.id_venta, nuevoEstado);
-            setVentas((prev) =>
-                prev.map((v) => (v.id_venta === venta.id_venta ? { ...v, estado: nuevoEstado } : v))
-            );
             toast.success('Estado de la venta actualizado.');
+            fetchVentas(filtro);
         } catch (error) {
             toast.error(getErrorMessage(error, 'Error al actualizar el estado.'));
         }
@@ -111,12 +107,28 @@ const Sale = () => {
 
     return (
         <div className="min-h-screen bg-brand-ink">
-            <main className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
+            <main className="mx-auto max-w-7xl px-6 pt-6 pb-10 lg:px-10">
                 <div className="mb-8">
                     <h1 className="flex items-center gap-3 text-2xl font-semibold text-white">
                         <FaChartLine className="text-brand-secondary" /> Ventas
                     </h1>
                     <p className="mt-1 text-sm text-slate-400">Historial y gestión de registros de venta.</p>
+                </div>
+
+                <div className="mb-5 flex gap-1 border-b border-white/10">
+                    {TABS.map((tab) => (
+                        <button
+                            key={tab.value}
+                            onClick={() => setFiltro(tab.value)}
+                            className={`-mb-px border-b-2 px-3 py-2 text-sm font-medium transition ${
+                                filtro === tab.value
+                                    ? 'border-brand-primary text-white'
+                                    : 'border-transparent text-slate-400 hover:text-white'
+                            }`}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
                 </div>
 
                 <div className="mb-8 flex flex-wrap items-center gap-4">
@@ -131,14 +143,6 @@ const Sale = () => {
                         />
                     </div>
 
-                    <Select
-                        icon={FaFilter}
-                        value={filtro}
-                        onChange={setFiltro}
-                        options={filtroOptions}
-                        className="w-44"
-                    />
-
                     <span className="text-sm text-slate-400">
                         {ventasFiltradas.length} {ventasFiltradas.length === 1 ? 'venta' : 'ventas'}
                     </span>
@@ -150,14 +154,14 @@ const Sale = () => {
                     </div>
                 ) : ventasFiltradas.length === 0 ? (
                     <div className="py-16 text-center">
-                        {busqueda || filtro !== 'todas' ? (
+                        {busqueda ? (
                             <>
                                 <h3 className="text-base font-semibold text-white">No se encontraron resultados</h3>
-                                <p className="mt-1.5 text-sm text-slate-400">Ajusta la búsqueda o el filtro seleccionado.</p>
+                                <p className="mt-1.5 text-sm text-slate-400">Ajusta la búsqueda o la pestaña seleccionada.</p>
                             </>
                         ) : (
                             <>
-                                <h3 className="text-base font-semibold text-white">No hay ventas registradas</h3>
+                                <h3 className="text-base font-semibold text-white">No hay ventas {filtro === 'pendiente' ? 'pendientes' : 'resueltas'}</h3>
                                 <p className="mt-1.5 text-sm text-slate-400">Las ventas que registres aparecerán aquí.</p>
                             </>
                         )}

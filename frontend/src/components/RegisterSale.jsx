@@ -162,7 +162,7 @@ const RegistrarVenta = () => {
 
     return (
         <div className="min-h-screen bg-brand-ink">
-            <main className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
+            <main className="mx-auto max-w-7xl px-6 pt-6 pb-10 lg:px-10">
                 <div className="mb-8">
                     <h1 className="flex items-center gap-3 text-2xl font-semibold text-white">
                         <FaCashRegister className="text-brand-secondary" /> Registrar Venta

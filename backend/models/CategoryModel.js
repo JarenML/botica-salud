@@ -12,7 +12,9 @@ class CategoryModel {
     }
 
     async listarCategorias() {
-        return prisma.categoria.findMany();
+        return prisma.categoria.findMany({
+            orderBy: { fecha_creacion: 'desc' }
+        });
     }
 
     async obtenerCategoriaPorId(id) {

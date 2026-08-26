@@ -5,8 +5,8 @@ class SaleService {
         return await SaleModel.crearVenta(datos);
     }
 
-    async listarVentas(codigo_venta) {
-        return await SaleModel.listarVentas(codigo_venta);
+    async listarVentas(codigo_venta, estado) {
+        return await SaleModel.listarVentas(codigo_venta, estado);
     }
 
     async obtenerVentaPorId(id) {

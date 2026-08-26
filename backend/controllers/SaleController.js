@@ -14,7 +14,8 @@ class SaleController {
     async listarVentas(req, res) {
         try {
             const codigo_venta = req.query.codigo_venta;
-            const ventas = await SaleService.listarVentas(codigo_venta);
+            const estado = req.query.estado;
+            const ventas = await SaleService.listarVentas(codigo_venta, estado);
             res.status(200).json(ventas); 
         } catch (error) {
             res.status(500).json({ message: `Error al listar las ventas: ${error.message}` });

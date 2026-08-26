@@ -34,6 +34,18 @@ router.use(verificarToken);
  *   get:
  *     summary: Listar todas las ventas
  *     tags: [Ventas]
+ *     parameters:
+ *       - in: query
+ *         name: codigo_venta
+ *         schema:
+ *           type: string
+ *         description: Filtra por codigo de venta
+ *       - in: query
+ *         name: estado
+ *         schema:
+ *           type: string
+ *           enum: [pendiente, resuelto]
+ *         description: Filtra por estado (pendiente, o resuelto que incluye pagado y anulado)
  *     responses:
  *       200:
  *         description: Lista de ventas

@@ -2,8 +2,8 @@ import api from './api';
 
 const saleService = {
     
-    listSales: async () => {
-        const res = await api.get('/ventas');
+    listSales: async (params = {}) => {
+        const res = await api.get('/ventas', { params });
         return res.data;
     },
 

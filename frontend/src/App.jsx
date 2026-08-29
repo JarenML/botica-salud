@@ -10,6 +10,7 @@ import SupplierPage from './pages/Supplier/SupplierPage';
 import ClientPage from './pages/Client/ClientPage';
 import RegisterSalePage from './pages/Sale/RegisterSale';
 import SalePage from './pages/Sale/SalePage';
+import ProfilePage from './pages/Profile/ProfilePage';
 
 function App() {
     const location = useLocation();
@@ -57,6 +58,9 @@ function App() {
                     <PrivateRoute>
                         {rol === 'admin' || rol === 'cajero' ? <SalePage /> : <HomePage />}
                     </PrivateRoute>
+                } />
+                <Route path="/perfil" element={
+                    <PrivateRoute><ProfilePage /></PrivateRoute>
                 } />
             </Routes>
         </>

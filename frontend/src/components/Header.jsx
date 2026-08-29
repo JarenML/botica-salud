@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
     FaUserCircle, FaCapsules, FaHome, FaBoxes, FaTags,
-    FaChartLine, FaTruck, FaUsers, FaCashRegister, FaSignOutAlt
+    FaChartLine, FaTruck, FaUsers, FaCashRegister, FaSignOutAlt, FaIdBadge
 } from 'react-icons/fa';
 import { NavLink, useNavigate } from 'react-router-dom';
 import '../styles/header.css';
@@ -27,6 +27,11 @@ const Header = () => {
     }, []);
 
     const toggleMenu = () => setShowMenu(!showMenu);
+
+    const handleProfile = () => {
+        setShowMenu(false);
+        navigate('/perfil');
+    };
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -68,6 +73,9 @@ const Header = () => {
                     </div>
                     {showMenu && (
                         <div className="user-menu">
+                            <button onClick={handleProfile}>
+                                <FaIdBadge /> Mi Perfil
+                            </button>
                             <button onClick={handleLogout}>
                                 <FaSignOutAlt /> Cerrar sesión
                             </button>

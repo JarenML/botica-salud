@@ -191,6 +191,12 @@
     background-color: rgba(255, 255, 255, 0.06);
 }
 
+.user-menu button + button {
+    margin-top: 2px;
+    border-top: 1px solid var(--hdr-border);
+    padding-top: 0.65rem;
+}
+
 /* ---------- Responsive ---------- */
 /* Espacio limitado: la barra conserva una sola fila y los enlaces
    pasan a modo icono para que las 7 opciones sigan cabiendo todas. */

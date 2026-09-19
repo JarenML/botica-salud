@@ -4,7 +4,7 @@
 
 ## Development with Docker
 
-Requires Docker and Docker Compose. Before starting the containers, make sure `backend/.env` and `frontend/.env` exist (copy them from their `.env.example` files if they don't).
+Requires Docker and Docker Compose. Before starting the containers, make sure `.env` (repo root, Postgres credentials), `backend/.env` and `frontend/.env` exist (copy them from their `.env.example` files if they don't). The root `.env` is optional: without it, Compose falls back to the same defaults as `.env.example`.
 
 ```bash
 docker compose -f docker-compose-dev.yml up -d

@@ -1,3 +1,6 @@
+# === RAÍZ (credenciales de docker-compose) ===
+.env
+
 # === BACKEND ===
 backend/node_modules/
 backend/.env
